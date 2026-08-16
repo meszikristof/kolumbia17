@@ -49,6 +49,7 @@ const pagesCollection = defineCollection({
     logo: z.string().optional(),
     bgImage: z.string().optional(),
     bgVideo: z.string().optional(),
+    hideHeroTitle: z.boolean().optional(),
     email: z.string().optional(),
     phone: z.string().optional(),
     address: z.string().optional(),

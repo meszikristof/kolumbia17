@@ -66,6 +66,7 @@ collections:
         file: "src/content/pages/home.md"
         fields:
           - { label: "Főcím (Hero)", name: "title", widget: "string" }
+          - { label: "Cím felirat elrejtése a háttérképen", name: "hideHeroTitle", widget: "boolean", default: false, required: false }
           - { label: "Egyedi logó", name: "logo", widget: "image", required: false }
           - { label: "Háttérkép", name: "bgImage", widget: "image", required: false }
           - { label: "Háttérvideó", name: "bgVideo", widget: "file", required: false }
