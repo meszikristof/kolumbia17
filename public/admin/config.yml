@@ -1,0 +1,79 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+locale: 'hu'
+
+collections:
+  - name: "hirek"
+    label: "Hírek"
+    folder: "src/content/hirek"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Cím", name: "title", widget: "string" }
+      - { label: "Dátum", name: "date", widget: "datetime" }
+      - { label: "Összefoglaló", name: "summary", widget: "text", required: false }
+      - { label: "Kiemelt kép", name: "featuredImage", widget: "image", required: false }
+      - { label: "Címkék", name: "tags", widget: "list", required: false }
+      - { label: "Tartalom", name: "body", widget: "markdown" }
+
+  - name: "eredmenyek"
+    label: "Eredmények"
+    folder: "src/content/eredmenyek"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Verseny neve", name: "title", widget: "string" }
+      - { label: "Dátum", name: "date", widget: "datetime" }
+      - { label: "Helyszín", name: "location", widget: "string", required: false }
+      - { label: "Típus", name: "type", widget: "select", options: ["saját", "külső_link"] }
+      - { label: "Külső link", name: "externalUrl", widget: "string", required: false }
+      - { label: "Kép", name: "featuredImage", widget: "image", required: false }
+      - { label: "Tartalom", name: "body", widget: "markdown", required: false }
+
+  - name: "versenykiiras"
+    label: "Versenykiírás"
+    folder: "src/content/versenykiiras"
+    create: true
+    slug: "{{year}}-{{slug}}"
+    fields:
+      - { label: "Cím", name: "title", widget: "string" }
+      - { label: "Dátum", name: "date", widget: "datetime" }
+      - { label: "Szezon", name: "season", widget: "string", required: false }
+      - { label: "Tartalom", name: "body", widget: "markdown" }
+
+  - name: "dokumentumok"
+    label: "Dokumentumok"
+    folder: "src/content/dokumentumok"
+    create: true
+    slug: "{{year}}-{{slug}}"
+    fields:
+      - { label: "Cím", name: "title", widget: "string" }
+      - { label: "Dátum", name: "date", widget: "datetime" }
+      - { label: "Dokumentum (PDF)", name: "pdf", widget: "file", required: false }
+      - { label: "Leírás", name: "body", widget: "markdown", required: false }
+
+  - name: "pages"
+    label: "Oldalak"
+    files:
+      - label: "Főoldal (Bemutatkozás)"
+        name: "home"
+        file: "src/content/pages/home.md"
+        fields:
+          - { label: "Főcím (Hero)", name: "title", widget: "string" }
+          - { label: "Egyedi logó", name: "logo", widget: "image", required: false }
+          - { label: "Háttérkép", name: "bgImage", widget: "image", required: false }
+          - { label: "Háttérvideó", name: "bgVideo", widget: "file", required: false }
+          - { label: "Bemutatkozás szövege", name: "body", widget: "markdown" }
+      - label: "Rólunk & Kapcsolat"
+        name: "rolunk"
+        file: "src/content/pages/rolunk.md"
+        fields:
+          - { label: "Cím", name: "title", widget: "string" }
+          - { label: "Tartalom", name: "body", widget: "markdown" }
+          - { label: "Email", name: "email", widget: "string" }
+          - { label: "Telefon", name: "phone", widget: "string", required: false }
+          - { label: "Cím (lakcím)", name: "address", widget: "text", required: false }
