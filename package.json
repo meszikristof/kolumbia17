@@ -9,9 +9,13 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "cms-proxy": "decap-server",
     "astro": "astro"
   },
   "dependencies": {
     "astro": "^7.2.2"
+  },
+  "devDependencies": {
+    "decap-server": "^3.10.0"
   }
 }
