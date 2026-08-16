@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 
 interface Props {
   title: string;
@@ -38,10 +40,10 @@ const { title, description = 'A Kolumbia Sport Klub hivatalos weboldala.' } = As
     </script>
   </head>
   <body>
-    <!-- Header will go here later -->
+    <Header />
     <main>
       <slot />
     </main>
-    <!-- Footer will go here later -->
+    <Footer />
   </body>
 </html>

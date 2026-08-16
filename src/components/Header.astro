@@ -1,0 +1,164 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+const navItems = [
+  { href: '/', text: 'Főoldal' },
+  { href: '/hirek/', text: 'Hírek' },
+  { href: '/eredmenyek/', text: 'Eredmények' },
+  { href: '/versenykiiras/', text: 'Versenykiírás' },
+  { href: '/dokumentumok/', text: 'Dokumentumok' },
+  { href: '/rolunk/', text: 'Rólunk' },
+];
+---
+
+<header class="header">
+  <div class="container header-container">
+    <a href="/" class="logo">
+      <span class="logo-accent">KOLUMBIA</span><span class="logo-number">17</span>
+    </a>
+
+    <button id="mobile-menu-btn" aria-label="Menü megnyitása" class="mobile-menu-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <nav class="nav" id="main-nav">
+      <ul class="nav-list">
+        {navItems.map((item) => (
+          <li>
+            <a href={item.href} class="nav-link">{item.text}</a>
+          </li>
+        ))}
+      </ul>
+      <div class="nav-actions">
+        <ThemeToggle />
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-light);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+  }
+
+  .logo {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--text-primary);
+  }
+
+  .logo-accent {
+    color: var(--text-primary);
+  }
+
+  .logo-number {
+    color: var(--accent-sky);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .nav-list {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+  }
+
+  .nav-link {
+    color: var(--text-secondary);
+    font-weight: 500;
+    padding: 0.5rem 0;
+  }
+
+  .nav-link:hover {
+    color: var(--accent-sky);
+  }
+
+  .mobile-menu-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .mobile-menu-btn {
+      display: block;
+    }
+
+    .nav {
+      display: none;
+      position: absolute;
+      top: 70px;
+      left: 0;
+      right: 0;
+      background-color: var(--bg-secondary);
+      flex-direction: column;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-light);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav.is-open {
+      display: flex;
+    }
+
+    .nav-list {
+      flex-direction: column;
+      width: 100%;
+      gap: 0.5rem;
+    }
+    
+    .nav-link {
+      display: block;
+      padding: 0.75rem;
+      border-radius: 8px;
+    }
+
+    .nav-link:hover {
+      background-color: var(--bg-accent);
+    }
+    
+    .nav-actions {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-light);
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+</style>
+
+<script>
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mainNav = document.getElementById('main-nav');
+
+  if (mobileMenuBtn && mainNav) {
+    mobileMenuBtn.addEventListener('click', () => {
+      mainNav.classList.toggle('is-open');
+    });
+  }
+</script>
