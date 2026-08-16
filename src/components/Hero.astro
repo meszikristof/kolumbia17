@@ -1,0 +1,86 @@
+---
+interface Props {
+  title: string;
+  bgImage?: string;
+  bgVideo?: string;
+  logo?: string;
+}
+
+const { title, bgImage, bgVideo, logo } = Astro.props;
+---
+
+<section class="hero">
+  {bgVideo ? (
+    <video autoplay loop muted playsinline class="hero-bg">
+      <source src={bgVideo} type="video/mp4" />
+    </video>
+  ) : (
+    <div class="hero-bg image-bg" style={`background-image: url('${bgImage || '/images/default-hero.jpg'}')`}></div>
+  )}
+  <div class="hero-overlay"></div>
+  
+  <div class="container hero-content">
+    {logo ? (
+      <img src={logo} alt={title} class="hero-logo" />
+    ) : (
+      <h1 class="hero-title">{title}</h1>
+    )}
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+  
+  .image-bg {
+    background-size: cover;
+    background-position: center;
+    /* Default sky/field gradient fallback */
+    background-color: var(--accent-sky);
+    background-image: linear-gradient(135deg, var(--accent-sky) 0%, var(--accent-field) 100%);
+  }
+  
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 20, 25, 0.4);
+    z-index: 1;
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+  
+  .hero-logo {
+    max-width: 300px;
+    height: auto;
+  }
+  
+  .hero-title {
+    color: #FFFFFF;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin: 0;
+  }
+</style>
