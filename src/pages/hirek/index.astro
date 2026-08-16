@@ -19,7 +19,7 @@ const sortedNews = allNews.sort((a, b) => b.data.date.valueOf() - a.data.date.va
             )}
             <div class="news-card-content">
               <time class="news-date">{news.data.date.toLocaleDateString('hu-HU')}</time>
-              <h2><a href={`/hirek/${news.slug}`}>{news.data.title}</a></h2>
+              <h2><a href={`/hirek/${news.id}`}>{news.data.title}</a></h2>
               {news.data.summary && <p class="news-summary">{news.data.summary}</p>}
               {news.data.tags && (
                 <div class="news-tags">

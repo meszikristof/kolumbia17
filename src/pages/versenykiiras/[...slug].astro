@@ -3,8 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
-  const newsEntries = await getCollection('hirek');
-  return newsEntries.map(entry => ({
+  const entries = await getCollection('versenykiiras');
+  return entries.map(entry => ({
     params: { slug: entry.id },
     props: { entry },
   }));
@@ -19,23 +19,15 @@ const { Content } = await render(entry);
     <div class="article-header">
       <time class="article-date">{entry.data.date.toLocaleDateString('hu-HU')}</time>
       <h1 class="article-title">{entry.data.title}</h1>
-      {entry.data.tags && (
-        <div class="article-tags">
-          {entry.data.tags.map(tag => <span class="tag">{tag}</span>)}
-        </div>
-      )}
+      {entry.data.season && <p class="article-season">Szezon: {entry.data.season}</p>}
     </div>
-    
-    {entry.data.featuredImage && (
-      <img src={entry.data.featuredImage} alt={entry.data.title} class="article-image" />
-    )}
     
     <div class="article-body prose">
       <Content />
     </div>
     
     <div class="article-footer">
-      <a href="/hirek/" class="back-link">&larr; Vissza a hírekhez</a>
+      <a href="/versenykiiras/" class="back-link">&larr; Vissza a versenykiírásokhoz</a>
     </div>
   </article>
 </BaseLayout>
@@ -48,6 +40,8 @@ const { Content } = await render(entry);
   
   .article-header {
     margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--accent-gold);
   }
   
   .article-date {
@@ -59,29 +53,12 @@ const { Content } = await render(entry);
   
   .article-title {
     font-size: 2.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
   
-  .article-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  
-  .tag {
-    background-color: var(--bg-accent);
+  .article-season {
     color: var(--text-secondary);
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-  }
-  
-  .article-image {
-    width: 100%;
-    max-height: 400px;
-    object-fit: cover;
-    border-radius: 12px;
-    margin-bottom: 2rem;
+    font-size: 1.125rem;
   }
   
   .article-body {
@@ -90,18 +67,13 @@ const { Content } = await render(entry);
     line-height: 1.7;
   }
   
-  .article-body :global(h2), .article-body :global(h3) {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-  }
-  
-  .article-body :global(p) {
-    margin-bottom: 1.5rem;
-  }
-  
   .article-body :global(ul), .article-body :global(ol) {
     margin-bottom: 1.5rem;
     padding-left: 1.5rem;
+  }
+  
+  .article-body :global(li) {
+    margin-bottom: 0.5rem;
   }
   
   .article-footer {

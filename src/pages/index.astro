@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import { getEntry, getCollection } from 'astro:content';
+import { getEntry, getCollection, render } from 'astro:content';
 
 const homeEntry = await getEntry('pages', 'home');
+const { Content } = homeEntry ? await render(homeEntry) : { Content: () => null };
 const allNews = await getCollection('hirek');
 const latestNews = allNews
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -19,9 +20,9 @@ const latestNews = allNews
   />
   
   <section class="intro-section container">
-    <div class="intro-content">
-      {homeEntry?.body ? (
-        <div set:html={homeEntry.body} />
+    <div class="intro-content prose">
+      {homeEntry ? (
+        <Content />
       ) : (
         <p>A Kolumbia Sport Klub bemutatkozása...</p>
       )}
@@ -39,7 +40,7 @@ const latestNews = allNews
             )}
             <div class="news-card-content">
               <time class="news-date">{news.data.date.toLocaleDateString('hu-HU')}</time>
-              <h3><a href={`/hirek/${news.slug}`}>{news.data.title}</a></h3>
+              <h3><a href={`/hirek/${news.id}`}>{news.data.title}</a></h3>
               {news.data.summary && <p class="news-summary">{news.data.summary}</p>}
             </div>
           </article>

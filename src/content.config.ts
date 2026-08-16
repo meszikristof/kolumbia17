@@ -1,7 +1,8 @@
 import { z, defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 const hirekCollection = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: "**/*.md", base: "./src/content/hirek" }),
   schema: z.object({
     title: z.string(),
     date: z.date(),
@@ -12,7 +13,7 @@ const hirekCollection = defineCollection({
 });
 
 const eredmenyekCollection = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: "**/*.md", base: "./src/content/eredmenyek" }),
   schema: z.object({
     title: z.string(),
     date: z.date(),
@@ -24,7 +25,7 @@ const eredmenyekCollection = defineCollection({
 });
 
 const versenykiirasCollection = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: "**/*.md", base: "./src/content/versenykiiras" }),
   schema: z.object({
     title: z.string(),
     date: z.date(),
@@ -33,7 +34,7 @@ const versenykiirasCollection = defineCollection({
 });
 
 const dokumentumokCollection = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: "**/*.md", base: "./src/content/dokumentumok" }),
   schema: z.object({
     title: z.string(),
     date: z.date(),
@@ -42,7 +43,7 @@ const dokumentumokCollection = defineCollection({
 });
 
 const pagesCollection = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: "**/*.md", base: "./src/content/pages" }),
   schema: z.object({
     title: z.string(),
     logo: z.string().optional(),

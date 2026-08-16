@@ -27,7 +27,7 @@ const sortedResults = allResults.sort((a, b) => b.data.date.valueOf() - a.data.d
                     </svg>
                   </a>
                 ) : (
-                  <a href={`/eredmenyek/${result.slug}`}>{result.data.title}</a>
+                  <a href={`/eredmenyek/${result.id}`}>{result.data.title}</a>
                 )}
               </h2>
               {result.data.location && <p class="result-location">Helyszín: {result.data.location}</p>}
