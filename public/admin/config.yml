@@ -1,6 +1,8 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: meszikristof/kolumbia17
   branch: develop
+  base_url: "https://<YOUR-CLOUDFLARE-WORKER-URL>" # Ezt majd ki kell cserélni a Worker URL-jére!
 
 local_backend: true
 

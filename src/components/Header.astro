@@ -2,18 +2,18 @@
 import ThemeToggle from './ThemeToggle.astro';
 
 const navItems = [
-  { href: '/', text: 'Főoldal' },
-  { href: '/hirek/', text: 'Hírek' },
-  { href: '/eredmenyek/', text: 'Eredmények' },
-  { href: '/versenykiiras/', text: 'Versenykiírás' },
-  { href: '/dokumentumok/', text: 'Dokumentumok' },
-  { href: '/rolunk/', text: 'Rólunk' },
+  { href: `${import.meta.env.BASE_URL}`, text: 'Főoldal' },
+  { href: `${import.meta.env.BASE_URL}hirek/`, text: 'Hírek' },
+  { href: `${import.meta.env.BASE_URL}eredmenyek/`, text: 'Eredmények' },
+  { href: `${import.meta.env.BASE_URL}versenykiiras/`, text: 'Versenykiírás' },
+  { href: `${import.meta.env.BASE_URL}dokumentumok/`, text: 'Dokumentumok' },
+  { href: `${import.meta.env.BASE_URL}rolunk/`, text: 'Rólunk' },
 ];
 ---
 
 <header class="header">
   <div class="container header-container">
-    <a href="/" class="logo">
+    <a href={import.meta.env.BASE_URL} class="logo">
       <span class="logo-accent">KOLUMBIA</span><span class="logo-number">17</span>
     </a>
 
