@@ -1,0 +1,6 @@
+[build]
+  # Nincs szükség build parancsra, mivel ez egy statikus HTML oldal
+  command = ""
+  
+  # A publikálni kívánt mappa maga a gyökérkönyvtár
+  publish = "."
