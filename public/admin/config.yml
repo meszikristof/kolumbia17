@@ -2,7 +2,7 @@ backend:
   name: github
   repo: meszikristof/kolumbia17
   branch: develop
-  base_url: "https://<YOUR-CLOUDFLARE-WORKER-URL>" # Ezt majd ki kell cserélni a Worker URL-jére!
+  base_url: "https://sveltia-cms-auth.meszikristof.workers.dev" 
 
 local_backend: true
 

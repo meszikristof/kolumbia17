@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import { getEntry, getCollection, render } from 'astro:content';
+import { getUrl } from '../utils/url';
 
 const homeEntry = await getEntry('pages', 'home');
 const { Content } = homeEntry ? await render(homeEntry) : { Content: () => null };
@@ -37,11 +38,11 @@ const latestNews = allNews
         latestNews.map((news) => (
           <article class="news-card">
             {news.data.featuredImage && (
-              <img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}${news.data.featuredImage}`} alt={news.data.title} class="news-image" />
+              <img src={getUrl(news.data.featuredImage)} alt={news.data.title} class="news-image" />
             )}
             <div class="news-card-content">
               <time class="news-date">{news.data.date.toLocaleDateString('hu-HU')}</time>
-              <h3><a href={`${import.meta.env.BASE_URL}hirek/${news.id}`}>{news.data.title}</a></h3>
+              <h3><a href={getUrl(`/hirek/${news.id}`)}>{news.data.title}</a></h3>
               {news.data.summary && <p class="news-summary">{news.data.summary}</p>}
             </div>
           </article>

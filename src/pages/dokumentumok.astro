@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
+import { getUrl } from '../utils/url';
 
 const allDocs = await getCollection('dokumentumok');
 const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -29,7 +30,7 @@ const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.va
                   <h2>{doc.data.title}</h2>
                 </div>
                 {doc.data.pdf && (
-                  <a href={doc.data.pdf} target="_blank" rel="noopener noreferrer" class="download-btn">
+                  <a href={getUrl(doc.data.pdf)} target="_blank" rel="noopener noreferrer" class="download-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                       <polyline points="7 10 12 15 17 10"></polyline>

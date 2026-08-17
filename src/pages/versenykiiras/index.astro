@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { getUrl } from '../../utils/url';
 
 const allAnnouncements = await getCollection('versenykiiras');
 const sortedAnnouncements = allAnnouncements.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -16,7 +17,7 @@ const sortedAnnouncements = allAnnouncements.sort((a, b) => b.data.date.valueOf(
           <article class="announcement-card">
             <div class="announcement-card-content">
               <time class="announcement-date">{announcement.data.date.toLocaleDateString('hu-HU')}</time>
-              <h2><a href={`/versenykiiras/${announcement.id}`}>{announcement.data.title}</a></h2>
+              <h2><a href={getUrl(`/versenykiiras/${announcement.id}`)}>{announcement.data.title}</a></h2>
               {announcement.data.season && <p class="announcement-season">Szezon: {announcement.data.season}</p>}
             </div>
           </article>

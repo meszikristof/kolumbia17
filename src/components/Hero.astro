@@ -1,4 +1,6 @@
 ---
+import { getUrl } from '../utils/url';
+
 interface Props {
   title: string;
   bgImage?: string;
@@ -9,27 +11,16 @@ interface Props {
 
 const { title, bgImage, bgVideo, logo, hideHeroTitle = false } = Astro.props;
 const hasCustomBackground = Boolean(bgImage || bgVideo);
-
-const resolveUrl = (url: string | undefined) => {
-  if (!url) return undefined;
-  if (url.startsWith('http')) return url;
-  if (url.startsWith('/')) {
-    const base = import.meta.env.BASE_URL;
-    const normalizedBase = base.endsWith('/') ? base.slice(0, -1) : base;
-    return `${normalizedBase}${url}`;
-  }
-  return url;
-};
 ---
 
 <section class="hero">
   {bgVideo ? (
     <video autoplay loop muted playsinline class="hero-bg hero-video">
-      <source src={resolveUrl(bgVideo)} type="video/mp4" />
+      <source src={getUrl(bgVideo)} type="video/mp4" />
     </video>
   ) : bgImage ? (
     <img 
-      src={resolveUrl(bgImage)} 
+      src={getUrl(bgImage)} 
       alt={title || "Kolumbia Sport Klub"} 
       class="hero-bg hero-image" 
       loading="eager" 
@@ -43,7 +34,7 @@ const resolveUrl = (url: string | undefined) => {
   
   <div class="container hero-content">
     {logo ? (
-      <img src={resolveUrl(logo)} alt={title} class="hero-logo" />
+      <img src={getUrl(logo)} alt={title} class="hero-logo" />
     ) : hideHeroTitle ? (
       <h1 class="sr-only">{title}</h1>
     ) : (

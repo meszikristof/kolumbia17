@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { getUrl } from '../../utils/url';
 
 const allResults = await getCollection('eredmenyek');
 const sortedResults = allResults.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -27,7 +28,7 @@ const sortedResults = allResults.sort((a, b) => b.data.date.valueOf() - a.data.d
                     </svg>
                   </a>
                 ) : (
-                  <a href={`/eredmenyek/${result.id}`}>{result.data.title}</a>
+                  <a href={getUrl(`/eredmenyek/${result.id}`)}>{result.data.title}</a>
                 )}
               </h2>
               {result.data.location && <p class="result-location">Helyszín: {result.data.location}</p>}

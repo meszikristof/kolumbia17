@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
+import { getUrl } from '../../utils/url';
 
 export async function getStaticPaths() {
   const newsEntries = await getCollection('hirek');
@@ -27,7 +28,7 @@ const { Content } = await render(entry);
     </div>
     
     {entry.data.featuredImage && (
-      <img src={entry.data.featuredImage} alt={entry.data.title} class="article-image" />
+      <img src={getUrl(entry.data.featuredImage)} alt={entry.data.title} class="article-image" />
     )}
     
     <div class="article-body prose">
@@ -35,7 +36,7 @@ const { Content } = await render(entry);
     </div>
     
     <div class="article-footer">
-      <a href="/hirek/" class="back-link">&larr; Vissza a hírekhez</a>
+      <a href={getUrl('/hirek/')} class="back-link">&larr; Vissza a hírekhez</a>
     </div>
   </article>
 </BaseLayout>
