@@ -1,6 +1,5 @@
 ---
-title: "Egyesületi Alapszabály"
-date: 2026-01-01
-pdf: "/images/uploads/alapszabaly_minta.pdf"
+title: Kolumbia Sport Klub Alapszabály (2026.03.20.)
+date: 2026-08-19T20:23:00.000+02:00
+pdf: /images/uploads/kol.-érvényes-asz.-2026.03.20..pdf
 ---
-A Kolumbia Sport Klub hivatalos alapszabálya, mely tartalmazza az egyesület működésének és tagjainak jogait, illetve kötelezettségeit.
