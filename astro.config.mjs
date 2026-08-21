@@ -3,6 +3,5 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://meszikristof.github.io',
-  base: '/kolumbia17',
+  site: 'https://kolumbia17.vercel.app',
 });
