@@ -1,39 +1,44 @@
 ---
-import '../styles/global.css';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Analytics from "@vercel/analytics/astro";
 
 interface Props {
   title: string;
   description?: string;
 }
 
-const { title, description = 'A Kolumbia Sport Klub hivatalos weboldala.' } = Astro.props;
+const { title, description = "A Kolumbia Sport Klub hivatalos weboldala." } =
+  Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hu">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} | Kolumbia Sport Klub</title>
     <meta name="description" content={description} />
-    
+
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Theme Check inline script to prevent flash of incorrect theme -->
     <script is:inline>
       if (
-        localStorage.getItem('theme') === 'dark' ||
-        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        localStorage.getItem("theme") === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
       ) {
-        document.documentElement.classList.add('dark');
+        document.documentElement.classList.add("dark");
       } else {
-        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.remove("dark");
       }
     </script>
   </head>
@@ -43,5 +48,6 @@ const { title, description = 'A Kolumbia Sport Klub hivatalos weboldala.' } = As
       <slot />
     </main>
     <Footer />
+    <Analytics />
   </body>
 </html>
