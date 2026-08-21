@@ -1,25 +1,41 @@
 ---
-import ThemeToggle from './ThemeToggle.astro';
-import { getUrl } from '../utils/url';
+import ThemeToggle from "./ThemeToggle.astro";
+import { getUrl } from "../utils/url";
 
 const navItems = [
-  { href: getUrl('/'), text: 'Főoldal' },
-  { href: getUrl('/hirek/'), text: 'Hírek' },
-  { href: getUrl('/eredmenyek/'), text: 'Eredmények' },
-  { href: getUrl('/versenykiiras/'), text: 'Versenykiírás' },
-  { href: getUrl('/dokumentumok/'), text: 'Dokumentumok' },
-  { href: getUrl('/rolunk/'), text: 'Rólunk' },
+  { href: getUrl("/"), text: "Főoldal" },
+  { href: getUrl("/hirek/"), text: "Hírek" },
+  { href: getUrl("/eredmenyek/"), text: "Eredmények" },
+  { href: getUrl("/versenykiiras/"), text: "Versenykiírás" },
+  { href: getUrl("/dokumentumok/"), text: "Dokumentumok" },
+  { href: getUrl("/rolunk/"), text: "Rólunk" },
 ];
 ---
 
 <header class="header">
   <div class="container header-container">
-    <a href={getUrl('/')} class="logo">
-      <span class="logo-accent">KOLUMBIA</span><span class="logo-number">17</span>
+    <a href={getUrl("/")} class="logo">
+      <span class="logo-accent">KOLUMBIA</span><span class="logo-number"
+        >17</span
+      >
     </a>
 
-    <button id="mobile-menu-btn" aria-label="Menü megnyitása" class="mobile-menu-btn">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <button
+      id="mobile-menu-btn"
+      aria-label="Menü megnyitása"
+      class="mobile-menu-btn"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <line x1="3" y1="12" x2="21" y2="12"></line>
         <line x1="3" y1="6" x2="21" y2="6"></line>
         <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -28,14 +44,70 @@ const navItems = [
 
     <nav class="nav" id="main-nav">
       <ul class="nav-list">
-        {navItems.map((item) => (
-          <li>
-            <a href={item.href} class="nav-link">{item.text}</a>
-          </li>
-        ))}
+        {
+          navItems.map((item) => (
+            <li>
+              <a href={item.href} class="nav-link">
+                {item.text}
+              </a>
+            </li>
+          ))
+        }
       </ul>
       <div class="nav-actions">
         <ThemeToggle />
+        <div class="social-links">
+          <a
+            href="https://www.facebook.com/groups/kolumbiasportklub"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-link"
+            aria-label="Facebook csoport"
+            title="Facebook csoport"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+              ></path>
+            </svg>
+          </a>
+          <a
+            href="https://www.youtube.com/@kolumbiasportklub4137"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-link"
+            aria-label="YouTube csatorna"
+            title="YouTube csatorna"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"
+              ></path>
+              <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"
+              ></polygon>
+            </svg>
+          </a>
+        </div>
       </div>
     </nav>
   </div>
@@ -76,13 +148,14 @@ const navItems = [
   .nav {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 
   .nav-list {
     display: flex;
     list-style: none;
     gap: 1.5rem;
+    align-items: center;
   }
 
   .nav-link {
@@ -93,6 +166,39 @@ const navItems = [
 
   .nav-link:hover {
     color: var(--accent-sky);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-left: 0.75rem;
+    border-left: 1px solid var(--border-light);
+  }
+
+  .social-links {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding-left: 0.5rem;
+    border-left: 1px solid var(--border-light);
+  }
+
+  .social-link {
+    color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .social-link:hover {
+    color: var(--accent-sky);
+    background-color: var(--bg-accent);
   }
 
   .mobile-menu-btn {
@@ -130,8 +236,9 @@ const navItems = [
       flex-direction: column;
       width: 100%;
       gap: 0.5rem;
+      align-items: stretch;
     }
-    
+
     .nav-link {
       display: block;
       padding: 0.75rem;
@@ -141,25 +248,29 @@ const navItems = [
     .nav-link:hover {
       background-color: var(--bg-accent);
     }
-    
+
     .nav-actions {
       margin-top: 1rem;
       padding-top: 1rem;
+      padding-left: 0;
+      border-left: none;
       border-top: 1px solid var(--border-light);
       width: 100%;
       display: flex;
       justify-content: flex-end;
+      align-items: center;
+      gap: 0.5rem;
     }
   }
 </style>
 
 <script>
-  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-  const mainNav = document.getElementById('main-nav');
+  const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+  const mainNav = document.getElementById("main-nav");
 
   if (mobileMenuBtn && mainNav) {
-    mobileMenuBtn.addEventListener('click', () => {
-      mainNav.classList.toggle('is-open');
+    mobileMenuBtn.addEventListener("click", () => {
+      mainNav.classList.toggle("is-open");
     });
   }
 </script>
