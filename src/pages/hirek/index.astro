@@ -22,7 +22,7 @@ const sortedNews = allNews.sort((a, b) => b.data.date.valueOf() - a.data.date.va
               <time class="news-date">{news.data.date.toLocaleDateString('hu-HU')}</time>
               <h2><a href={getUrl(`/hirek/${news.id}`)}>{news.data.title}</a></h2>
               {news.data.summary && <p class="news-summary">{news.data.summary}</p>}
-              {news.data.tags && (
+              {news.data.tags && news.data.tags.length > 0 && (
                 <div class="news-tags">
                   {news.data.tags.map(tag => <span class="tag">{tag}</span>)}
                 </div>
@@ -74,6 +74,10 @@ const sortedNews = allNews.sort((a, b) => b.data.date.valueOf() - a.data.date.va
   
   .news-card-content {
     padding: 1.5rem;
+  }
+
+  .news-card-content > :last-child {
+    margin-bottom: 0;
   }
   
   .news-date {

@@ -72,6 +72,10 @@ const sortedResults = allResults.sort((a, b) => b.data.date.valueOf() - a.data.d
   .result-card-content {
     padding: 1.5rem;
   }
+
+  .result-card-content > :last-child {
+    margin-bottom: 0;
+  }
   
   .result-date {
     display: block;

@@ -60,6 +60,10 @@ const sortedAnnouncements = allAnnouncements.sort((a, b) => b.data.date.valueOf(
   .announcement-card-content {
     padding: 1.5rem;
   }
+
+  .announcement-card-content > :last-child {
+    margin-bottom: 0;
+  }
   
   .announcement-date {
     display: block;

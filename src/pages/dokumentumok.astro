@@ -15,9 +15,10 @@ const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.va
     <div class="docs-list">
       {sortedDocs.length > 0 ? (
         sortedDocs.map(async (doc) => {
-          const { Content } = await render(doc);
+          const hasContent = Boolean(doc.body && doc.body.trim().length > 0);
+          const { Content } = hasContent ? await render(doc) : { Content: null };
           return (
-            <article class="doc-card">
+            <article class:list={["doc-card", { "no-body": !hasContent }]}>
               <div class="doc-card-header">
                 <div class="doc-title-wrapper">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="doc-icon">
@@ -40,9 +41,11 @@ const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.va
                   </a>
                 )}
               </div>
-              <div class="doc-body prose">
-                <Content />
-              </div>
+              {hasContent && Content && (
+                <div class="doc-body prose">
+                  <Content />
+                </div>
+              )}
             </article>
           )
         })
@@ -81,6 +84,12 @@ const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.va
     border: 1px solid var(--border-light);
     border-radius: 12px;
     padding: 1.5rem;
+  }
+
+  .doc-card.no-body .doc-card-header {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
   }
   
   .doc-card-header {
