@@ -17,33 +17,105 @@ const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.va
         sortedDocs.map(async (doc) => {
           const hasContent = Boolean(doc.body && doc.body.trim().length > 0);
           const { Content } = hasContent ? await render(doc) : { Content: null };
+          const hasPdf = Boolean(doc.data.pdf);
+          const pdfUrl = hasPdf ? getUrl(doc.data.pdf) : '';
+          
           return (
-            <article class:list={["doc-card", { "no-body": !hasContent }]}>
+            <article class:list={["doc-card", { "no-body": !hasContent, "has-pdf": hasPdf }]}>
               <div class="doc-card-header">
                 <div class="doc-title-wrapper">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="doc-icon">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                  </svg>
-                  <h2>{doc.data.title}</h2>
+                  {hasPdf ? (
+                    <h2>
+                      <button
+                        type="button"
+                        class="doc-title-btn js-preview-trigger"
+                        data-pdf-url={pdfUrl}
+                        aria-expanded="false"
+                        title="Kattints az előnézethez"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="doc-icon">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                          <polyline points="14 2 14 8 20 8"></polyline>
+                          <line x1="16" y1="13" x2="8" y2="13"></line>
+                          <line x1="16" y1="17" x2="8" y2="17"></line>
+                          <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        <span>{doc.data.title}</span>
+                      </button>
+                    </h2>
+                  ) : (
+                    <h2>
+                      <div class="doc-title-static">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="doc-icon">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                          <polyline points="14 2 14 8 20 8"></polyline>
+                          <line x1="16" y1="13" x2="8" y2="13"></line>
+                          <line x1="16" y1="17" x2="8" y2="17"></line>
+                          <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        <span>{doc.data.title}</span>
+                      </div>
+                    </h2>
+                  )}
                 </div>
-                {doc.data.pdf && (
-                  <a href={getUrl(doc.data.pdf)} target="_blank" rel="noopener noreferrer" class="download-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                      <polyline points="7 10 12 15 17 10"></polyline>
-                      <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                    Letöltés PDF
-                  </a>
+
+                {hasPdf && (
+                  <div class="doc-actions">
+                    <button
+                      type="button"
+                      class="preview-btn js-preview-trigger"
+                      data-pdf-url={pdfUrl}
+                      aria-expanded="false"
+                      title="Dokumentum előnézete"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon icon-view">
+                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon icon-close" style="display: none;">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                      <span class="preview-btn-text">Megtekintés</span>
+                    </button>
+                    <a
+                      href={pdfUrl}
+                      download
+                      class="download-btn"
+                      title="Letöltés"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                      </svg>
+                      <span>Letöltés</span>
+                    </a>
+                  </div>
                 )}
               </div>
+
               {hasContent && Content && (
                 <div class="doc-body prose">
                   <Content />
+                </div>
+              )}
+
+              {hasPdf && (
+                <div class="doc-preview-wrapper" hidden>
+                  <div class="doc-preview-container">
+                    <object
+                      class="doc-preview-iframe"
+                      data-src={pdfUrl}
+                      type="application/pdf"
+                      title={`${doc.data.title} előnézet`}
+                    >
+                      <div class="doc-preview-fallback">
+                        <p>A böngészője nem támogatja a beágyazott PDF-eket.</p>
+                        <a href={pdfUrl} target="_blank" rel="noopener noreferrer" class="download-btn">Megnyitás új lapon</a>
+                      </div>
+                    </object>
+                  </div>
                 </div>
               )}
             </article>
@@ -59,7 +131,7 @@ const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.va
 <style>
   .page-content {
     padding: 3rem 1.5rem 5rem;
-    max-width: 800px;
+    max-width: 850px;
   }
   
   .page-title {
@@ -84,9 +156,15 @@ const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.va
     border: 1px solid var(--border-light);
     border-radius: 12px;
     padding: 1.5rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .doc-card.no-body .doc-card-header {
+  .doc-card.is-preview-open {
+    border-color: var(--accent-sky);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .doc-card.no-body:not(.is-preview-open) .doc-card-header {
     margin-bottom: 0;
     padding-bottom: 0;
     border-bottom: none;
@@ -95,7 +173,7 @@ const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.va
   .doc-card-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
     margin-bottom: 1rem;
@@ -106,16 +184,95 @@ const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.va
   .doc-title-wrapper {
     display: flex;
     align-items: center;
+    flex: 1;
+    min-width: 260px;
+  }
+
+  .doc-card h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.4;
+    font-weight: 700;
+  }
+
+  .doc-title-btn {
+    display: inline-flex;
+    align-items: center;
     gap: 0.75rem;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 1.25rem;
+    font-weight: 700;
+    transition: color 0.2s ease;
+  }
+
+  .doc-title-btn:hover {
+    color: var(--accent-sky);
+  }
+
+  .doc-title-btn:hover .doc-icon {
+    color: var(--accent-sky);
+  }
+
+  .doc-title-static {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 700;
   }
   
   .doc-icon {
     color: var(--accent-sky);
+    flex-shrink: 0;
+    transition: color 0.2s ease;
   }
-  
-  .doc-card h2 {
-    margin: 0;
-    font-size: 1.25rem;
+
+  .doc-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .preview-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--bg-accent);
+    color: var(--text-primary);
+    border: 1px solid var(--border-light);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .preview-btn:hover {
+    background-color: var(--border-light);
+    color: var(--accent-sky);
+  }
+
+  .doc-card.is-preview-open .preview-btn {
+    background-color: var(--accent-sky);
+    border-color: var(--accent-sky);
+    color: #ffffff;
+  }
+
+  .doc-card.is-preview-open .icon-view {
+    display: none !important;
+  }
+
+  .doc-card.is-preview-open .icon-close {
+    display: inline-block !important;
   }
   
   .download-btn {
@@ -128,6 +285,7 @@ const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.va
     border-radius: 6px;
     font-weight: 600;
     font-size: 0.875rem;
+    text-decoration: none;
     transition: background-color 0.2s;
   }
   
@@ -138,9 +296,143 @@ const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.va
   
   .doc-body {
     color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .doc-preview-wrapper {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-light);
+    animation: fadeIn 0.25s ease-out;
+  }
+
+  .doc-preview-container {
+    width: 100%;
+    height: 600px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+    background-color: var(--bg-primary);
+  }
+
+  .doc-preview-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+  
+  .doc-preview-fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 1rem;
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-secondary);
   }
   
   .no-content {
     color: var(--text-secondary);
   }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .doc-card-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .doc-actions {
+      width: 100%;
+    }
+
+    .preview-btn,
+    .download-btn {
+      flex: 1;
+      justify-content: center;
+    }
+
+    .doc-preview-container {
+      height: 450px;
+    }
+  }
 </style>
+
+<script>
+  function isMobileDevice(): boolean {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }
+
+  function setupDocPreviews() {
+    const triggers = document.querySelectorAll<HTMLElement>('.js-preview-trigger');
+
+    triggers.forEach((trigger) => {
+      // Remove previous listener to avoid duplicate listeners on page navigation
+      trigger.onclick = (e) => {
+        e.preventDefault();
+        const pdfUrl = trigger.dataset.pdfUrl;
+        if (!pdfUrl) return;
+
+        // Mobile redirection to native PDF viewer
+        if (isMobileDevice()) {
+          window.open(pdfUrl, '_blank', 'noopener,noreferrer');
+          return;
+        }
+
+        // Desktop inline preview toggle
+        const card = trigger.closest<HTMLElement>('.doc-card');
+        if (!card) return;
+
+        const previewWrapper = card.querySelector<HTMLElement>('.doc-preview-wrapper');
+        const iframe = card.querySelector<HTMLObjectElement>('.doc-preview-iframe');
+        const allCardTriggers = card.querySelectorAll<HTMLElement>('.js-preview-trigger');
+        const previewBtnText = card.querySelector<HTMLElement>('.preview-btn-text');
+
+        if (!previewWrapper || !iframe) return;
+
+        const isOpen = card.classList.contains('is-preview-open');
+
+        if (isOpen) {
+          // Close preview
+          card.classList.remove('is-preview-open');
+          previewWrapper.hidden = true;
+          allCardTriggers.forEach((t) => t.setAttribute('aria-expanded', 'false'));
+          if (previewBtnText) {
+            previewBtnText.textContent = 'Megtekintés';
+          }
+        } else {
+          // Open preview: unhide wrapper first so dimensions exist
+          card.classList.add('is-preview-open');
+          previewWrapper.hidden = false;
+
+          const targetSrc = iframe.dataset.src || pdfUrl;
+          if (iframe.getAttribute('data') !== targetSrc) {
+            iframe.setAttribute('data', targetSrc);
+          }
+
+          allCardTriggers.forEach((t) => t.setAttribute('aria-expanded', 'true'));
+          if (previewBtnText) {
+            previewBtnText.textContent = 'Bezárás';
+          }
+        }
+      };
+    });
+  }
+
+  // Setup on initial load and view transitions
+  setupDocPreviews();
+  document.addEventListener('astro:page-load', setupDocPreviews);
+</script>
