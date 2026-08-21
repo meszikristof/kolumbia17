@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; {new Date().getFullYear()} Kolumbia Sport Klub. Minden jog fenntartva.</p>
+      <p>&copy; {new Date().getFullYear()} Kolumbia Sport Klub. Minden jog fenntartva. | <a href="/adatvedelem" class="footer-link">Adatvédelmi tájékoztató</a></p>
     </div>
   </div>
 </footer>
@@ -64,5 +64,16 @@
     border-top: 1px solid var(--border-light);
     color: var(--text-secondary);
     font-size: 0.875rem;
+  }
+  
+  .footer-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  
+  .footer-link:hover {
+    color: var(--accent-sky);
+    text-decoration: underline;
   }
 </style>
