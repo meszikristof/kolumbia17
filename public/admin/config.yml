@@ -4,7 +4,7 @@ backend:
   branch: develop
   base_url: "https://sveltia-cms-auth.meszikristof.workers.dev" 
 
-local_backend: true
+local_backend: false
 
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
