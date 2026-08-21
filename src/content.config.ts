@@ -5,7 +5,7 @@ const hirekCollection = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/hirek" }),
   schema: z.object({
     title: z.string(),
-    date: z.date(),
+    date: z.coerce.date(),
     summary: z.string().optional(),
     featuredImage: z.string().optional(),
     tags: z.array(z.string()).optional(),
@@ -16,7 +16,7 @@ const eredmenyekCollection = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/eredmenyek" }),
   schema: z.object({
     title: z.string(),
-    date: z.date(),
+    date: z.coerce.date(),
     location: z.string().optional(),
     type: z.enum(['saját', 'külső_link']),
     externalUrl: z.string().optional(),
@@ -28,7 +28,7 @@ const versenykiirasCollection = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/versenykiiras" }),
   schema: z.object({
     title: z.string(),
-    date: z.date(),
+    date: z.coerce.date(),
     season: z.string().optional(),
   }),
 });
@@ -37,7 +37,7 @@ const dokumentumokCollection = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/dokumentumok" }),
   schema: z.object({
     title: z.string(),
-    date: z.date(),
+    date: z.coerce.date(),
     pdf: z.string().optional(),
   }),
 });
