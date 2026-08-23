@@ -79,3 +79,17 @@ collections:
           - { label: "Email", name: "email", widget: "string" }
           - { label: "Telefon", name: "phone", widget: "string", required: false }
           - { label: "Cím (lakcím)", name: "address", widget: "text", required: false }
+          - label: "Választott tisztségviselők"
+            name: "officials"
+            widget: "list"
+            required: false
+            fields:
+              - { label: "Csoport neve (pl. Elnökségi tagok)", name: "groupName", widget: "string" }
+              - label: "Tagok"
+                name: "members"
+                widget: "list"
+                fields:
+                  - { label: "Tisztség (pl. Elnök, Tag, Póttag)", name: "role", widget: "string" }
+                  - { label: "Név", name: "name", widget: "string" }
+                  - { label: "Telefonszám", name: "phone", widget: "string", required: false }
+                  - { label: "Email cím", name: "email", widget: "string", required: false }

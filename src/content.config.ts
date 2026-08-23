@@ -53,6 +53,19 @@ const pagesCollection = defineCollection({
     email: z.string().optional(),
     phone: z.string().optional(),
     address: z.string().optional(),
+    officials: z.array(
+      z.object({
+        groupName: z.string(),
+        members: z.array(
+          z.object({
+            role: z.string(),
+            name: z.string(),
+            phone: z.string().optional(),
+            email: z.string().optional(),
+          })
+        ),
+      })
+    ).optional(),
   }),
 });
 
