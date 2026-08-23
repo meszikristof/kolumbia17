@@ -53,6 +53,8 @@ const pagesCollection = defineCollection({
     email: z.string().optional(),
     phone: z.string().optional(),
     address: z.string().optional(),
+    orgName: z.string().optional(),
+    taxNumber: z.string().optional(),
     officials: z.array(
       z.object({
         groupName: z.string(),

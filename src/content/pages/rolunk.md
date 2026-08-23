@@ -1,5 +1,8 @@
 ---
 title: "Rólunk"
+orgName: "Kolumbia Sport Klub Versenykerület"
+address: "2225 Üllő, Gyömrői út 9."
+taxNumber: "19662817-1-13"
 officials:
   - groupName: "Elnökségi tagok"
     members:

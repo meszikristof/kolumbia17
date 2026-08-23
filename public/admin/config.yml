@@ -76,6 +76,9 @@ collections:
         fields:
           - { label: "Cím", name: "title", widget: "string" }
           - { label: "Tartalom", name: "body", widget: "markdown" }
+          - { label: "Szervezet neve", name: "orgName", widget: "string", required: false }
+          - { label: "Cím (székhely)", name: "address", widget: "text", required: false }
+          - { label: "Adószám", name: "taxNumber", widget: "string", required: false }
           - label: "Választott tisztségviselők"
             name: "officials"
             widget: "list"
