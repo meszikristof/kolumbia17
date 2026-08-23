@@ -21,7 +21,13 @@ const navItems = [
     <a href={getUrl("/")} class="logo">
       {
         logo && (
-          <img src={getUrl(logo)} alt="Kolumbia 17 Logo" class="logo-img" />
+          <img
+            src={getUrl(logo)}
+            alt="Kolumbia 17 Logo"
+            class="logo-img"
+            fetchpriority="high"
+            decoding="sync"
+          />
         )
       }
       <span class="logo-text">
@@ -294,12 +300,20 @@ const navItems = [
 </style>
 
 <script>
-  const mobileMenuBtn = document.getElementById("mobile-menu-btn");
-  const mainNav = document.getElementById("main-nav");
+  document.addEventListener("astro:page-load", () => {
+    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+    const mainNav = document.getElementById("main-nav");
 
-  if (mobileMenuBtn && mainNav) {
-    mobileMenuBtn.addEventListener("click", () => {
-      mainNav.classList.toggle("is-open");
-    });
-  }
+    if (mobileMenuBtn && mainNav) {
+      // Remove old listener if exists to prevent duplicates (though Astro handles DOM replacement, it's good practice)
+      const newBtn = mobileMenuBtn.cloneNode(true);
+      if (mobileMenuBtn.parentNode) {
+        mobileMenuBtn.parentNode.replaceChild(newBtn, mobileMenuBtn);
+      }
+      
+      newBtn.addEventListener("click", () => {
+        mainNav.classList.toggle("is-open");
+      });
+    }
+  });
 </script>
