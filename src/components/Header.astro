@@ -1,6 +1,10 @@
 ---
 import ThemeToggle from "./ThemeToggle.astro";
 import { getUrl } from "../utils/url";
+import { getEntry } from "astro:content";
+
+const homeEntry = await getEntry("pages", "home");
+const logo = homeEntry?.data.logo;
 
 const navItems = [
   { href: getUrl("/"), text: "Főoldal" },
@@ -15,9 +19,16 @@ const navItems = [
 <header class="header">
   <div class="container header-container">
     <a href={getUrl("/")} class="logo">
-      <span class="logo-accent">KOLUMBIA</span><span class="logo-number"
-        >17</span
-      >
+      {
+        logo && (
+          <img src={getUrl(logo)} alt="Kolumbia 17 Logo" class="logo-img" />
+        )
+      }
+      <span class="logo-text">
+        <span class="logo-accent">KOLUMBIA</span><span class="logo-number"
+          >17</span
+        >
+      </span>
     </a>
 
     <button
@@ -130,11 +141,29 @@ const navItems = [
   }
 
   .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
     font-family: var(--font-heading);
     font-size: 1.5rem;
     font-weight: 800;
     letter-spacing: 0.1em;
     color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .logo-img {
+    height: 42px;
+    width: auto;
+    max-width: 48px;
+    object-fit: contain;
+    border-radius: 4px;
+    display: block;
+  }
+
+  .logo-text {
+    display: inline-flex;
+    align-items: baseline;
   }
 
   .logo-accent {

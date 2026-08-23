@@ -5,11 +5,10 @@ interface Props {
   title: string;
   bgImage?: string;
   bgVideo?: string;
-  logo?: string;
   hideHeroTitle?: boolean;
 }
 
-const { title, bgImage, bgVideo, logo, hideHeroTitle = false } = Astro.props;
+const { title, bgImage, bgVideo, hideHeroTitle = false } = Astro.props;
 const hasCustomBackground = Boolean(bgImage || bgVideo);
 ---
 
@@ -33,9 +32,7 @@ const hasCustomBackground = Boolean(bgImage || bgVideo);
   {(!hasCustomBackground || !hideHeroTitle) && <div class="hero-overlay"></div>}
   
   <div class="container hero-content">
-    {logo ? (
-      <img src={getUrl(logo)} alt={title} class="hero-logo" />
-    ) : hideHeroTitle ? (
+    {hideHeroTitle ? (
       <h1 class="sr-only">{title}</h1>
     ) : (
       <h1 class="hero-title">{title}</h1>
@@ -87,11 +84,6 @@ const hasCustomBackground = Boolean(bgImage || bgVideo);
     position: relative;
     z-index: 2;
     text-align: center;
-  }
-  
-  .hero-logo {
-    max-width: 300px;
-    height: auto;
   }
   
   .hero-title {
