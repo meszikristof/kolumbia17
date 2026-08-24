@@ -300,20 +300,14 @@ const navItems = [
 </style>
 
 <script>
-  document.addEventListener("astro:page-load", () => {
-    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
-    const mainNav = document.getElementById("main-nav");
-
-    if (mobileMenuBtn && mainNav) {
-      // Remove old listener if exists to prevent duplicates (though Astro handles DOM replacement, it's good practice)
-      const newBtn = mobileMenuBtn.cloneNode(true);
-      if (mobileMenuBtn.parentNode) {
-        mobileMenuBtn.parentNode.replaceChild(newBtn, mobileMenuBtn);
-      }
-      
-      newBtn.addEventListener("click", () => {
+  // Handle mobile menu toggle using event delegation (runs once on initial load)
+  document.addEventListener("click", (e) => {
+    const mobileMenuBtn = e.target.closest("#mobile-menu-btn");
+    if (mobileMenuBtn) {
+      const mainNav = document.getElementById("main-nav");
+      if (mainNav) {
         mainNav.classList.toggle("is-open");
-      });
+      }
     }
   });
 </script>

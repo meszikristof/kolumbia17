@@ -42,63 +42,52 @@
 </style>
 
 <script>
-  document.addEventListener("astro:page-load", () => {
-    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-    const themeToggleBtn = document.getElementById('theme-toggle');
-
-    if (!themeToggleBtn || !themeToggleDarkIcon || !themeToggleLightIcon) {
-      return;
-    }
-
-    // Change the icons inside the button based on previous settings
-    if (
-      localStorage.getItem('theme') === 'dark' ||
-      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      themeToggleLightIcon.classList.remove('hidden');
-      themeToggleDarkIcon.classList.add('hidden');
-    } else {
-      themeToggleDarkIcon.classList.remove('hidden');
-      themeToggleLightIcon.classList.add('hidden');
-    }
+  function updateIcons() {
+    const isDark = document.documentElement.classList.contains('dark');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
     
-    // Remove old listener if exists
-    const newBtn = themeToggleBtn.cloneNode(true);
-    if (themeToggleBtn.parentNode) {
-      themeToggleBtn.parentNode.replaceChild(newBtn, themeToggleBtn);
-    }
-    
-    const newDarkIcon = newBtn.querySelector('#theme-toggle-dark-icon');
-    const newLightIcon = newBtn.querySelector('#theme-toggle-light-icon');
-
-    newBtn.addEventListener('click', function () {
-      if (!newDarkIcon || !newLightIcon) return;
-      
-      // toggle icons inside button
-      newDarkIcon.classList.toggle('hidden');
-      newLightIcon.classList.toggle('hidden');
-
-      // if set via local storage previously
-      if (localStorage.getItem('theme')) {
-        if (localStorage.getItem('theme') === 'light') {
-          document.documentElement.classList.add('dark');
-          localStorage.setItem('theme', 'dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-          localStorage.setItem('theme', 'light');
-        }
-
-      // if NOT set via local storage previously
+    if (darkIcon && lightIcon) {
+      if (isDark) {
+        lightIcon.classList.remove('hidden');
+        darkIcon.classList.add('hidden');
       } else {
-        if (document.documentElement.classList.contains('dark')) {
-          document.documentElement.classList.remove('dark');
-          localStorage.setItem('theme', 'light');
-        } else {
-          document.documentElement.classList.add('dark');
-          localStorage.setItem('theme', 'dark');
-        }
+        darkIcon.classList.remove('hidden');
+        lightIcon.classList.add('hidden');
       }
-    });
+    }
+  }
+
+  // Update icons on initial load and after view transitions
+  document.addEventListener("astro:page-load", updateIcons);
+
+  // Restore theme class on every ViewTransition swap to prevent resetting on navigation
+  document.addEventListener("astro:after-swap", () => {
+    if (
+      localStorage.getItem("theme") === "dark" ||
+      (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  });
+
+  // Handle clicks using event delegation (runs once on initial load)
+  document.addEventListener('click', (e) => {
+    const toggleBtn = e.target.closest('#theme-toggle');
+    if (!toggleBtn) return;
+
+    const isDark = document.documentElement.classList.contains('dark');
+    
+    if (isDark) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+    
+    updateIcons();
   });
 </script>
