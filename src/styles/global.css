@@ -101,12 +101,26 @@ a:hover {
   border: 1px solid var(--border-light);
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, width 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .embedded-doc-wrapper.is-preview-open {
   border-color: var(--accent-sky);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+@media (min-width: 850px) {
+  .embedded-doc-wrapper.is-preview-open {
+    width: min(1140px, calc(100vw - 4rem));
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .embedded-doc-wrapper.is-preview-open .embedded-doc-frame-container {
+    height: 700px;
+    max-height: 80vh;
+  }
 }
 
 html.dark .embedded-doc-wrapper {

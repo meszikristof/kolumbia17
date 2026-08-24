@@ -156,12 +156,25 @@ const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.va
     border: 1px solid var(--border-light);
     border-radius: 12px;
     padding: 1.5rem;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, width 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .doc-card.is-preview-open {
     border-color: var(--accent-sky);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  @media (min-width: 900px) {
+    .doc-card.is-preview-open {
+      width: min(1140px, calc(100vw - 4rem));
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .doc-card.is-preview-open .doc-preview-container {
+      height: 700px;
+    }
   }
 
   .doc-card.no-body:not(.is-preview-open) .doc-card-header {
