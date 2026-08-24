@@ -166,14 +166,15 @@ const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.va
 
   @media (min-width: 900px) {
     .doc-card.is-preview-open {
-      width: min(1140px, calc(100vw - 4rem));
+      width: min(1600px, calc(100vw - 3rem));
       position: relative;
       left: 50%;
       transform: translateX(-50%);
     }
 
     .doc-card.is-preview-open .doc-preview-container {
-      height: 700px;
+      height: 760px;
+      max-height: 85vh;
     }
   }
 
