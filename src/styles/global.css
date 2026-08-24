@@ -198,6 +198,21 @@ html.dark .embedded-doc-icon-badge.pdf {
   text-overflow: ellipsis;
 }
 
+.embedded-doc-title-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: var(--text-primary);
+  transition: color 0.2s ease;
+}
+
+.embedded-doc-title-btn:hover {
+  color: var(--accent-sky);
+}
+
 .embedded-doc-badge {
   font-size: 0.75rem;
   color: var(--text-secondary);
@@ -223,6 +238,18 @@ html.dark .embedded-doc-icon-badge.pdf {
   font-weight: 600;
   text-decoration: none;
   transition: all 0.2s ease;
+}
+
+.embedded-doc-btn .icon-close {
+  display: none;
+}
+
+.embedded-doc-wrapper.is-preview-open .embedded-doc-btn .icon-view {
+  display: none !important;
+}
+
+.embedded-doc-wrapper.is-preview-open .embedded-doc-btn .icon-close {
+  display: inline-block !important;
 }
 
 .embedded-doc-btn.btn-download {
