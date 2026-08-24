@@ -104,9 +104,18 @@ a:hover {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.embedded-doc-wrapper.is-preview-open {
+  border-color: var(--accent-sky);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
 html.dark .embedded-doc-wrapper {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   border-color: var(--border-light);
+}
+
+html.dark .embedded-doc-wrapper.is-preview-open {
+  border-color: var(--accent-sky);
 }
 
 .embedded-doc-header {
@@ -235,6 +244,12 @@ html.dark .embedded-doc-icon-badge.pdf {
   background-color: var(--bg-secondary);
   border-color: var(--accent-sky);
   color: var(--accent-sky) !important;
+}
+
+.embedded-doc-wrapper.is-preview-open .embedded-doc-btn.btn-open {
+  background-color: var(--accent-sky);
+  border-color: var(--accent-sky);
+  color: #ffffff !important;
 }
 
 .embedded-doc-frame-container {
