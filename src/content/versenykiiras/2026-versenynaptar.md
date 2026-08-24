@@ -5,3 +5,4 @@ season: '2026'
 ---
 
 [document-embed src="/images/uploads/Kolumbia%20VK.%20Versenyprogram-2026-Fiatalok.xlsx" title="A 2026. évi fiatal-galambok hivatalos versenyprogramja"]
+ 
