@@ -387,7 +387,7 @@ export default function rehypeDocumentEmbed(options = {}) {
         if (child.type === 'element' && child.tagName === 'p') {
           // Check for shortcode [document-embed src="..." title="..."]
           const textContent = getTextContent(child).trim();
-          const shortcodeMatch = textContent.match(/^\[document-embed\s+src=["']([^"']+)["'](?:\s+title=["']([^"']*)["'])?\]$/i);
+          const shortcodeMatch = textContent.match(/^\[document-embed\s+src=["'”“‘’]([^"'”“‘’]+)["'”“‘’](?:\s+title=["'”“‘’]([^"'”“‘’]*)["'”“‘’])?\]$/i);
 
           if (shortcodeMatch) {
             const src = shortcodeMatch[1];
