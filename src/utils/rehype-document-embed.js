@@ -433,6 +433,19 @@ export default function rehypeDocumentEmbed(options = {}) {
           }
         }
 
+        // 3. Direct a (link) element in tree with document extension
+        if (child.type === 'element' && child.tagName === 'a') {
+          const href = child.properties && child.properties.href;
+          if (isDocumentFile(href)) {
+            const title = getTextContent(child).trim();
+            const docNode = createDocumentNode(href, title, siteUrl);
+            if (docNode) {
+              parent.children[i] = docNode;
+              continue;
+            }
+          }
+        }
+
         // Recursively process child
         transform(child);
       }
