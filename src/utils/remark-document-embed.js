@@ -56,7 +56,8 @@ function buildEmbedHtml(src, title, siteUrl) {
 
   const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M8 13h8M8 17h8M12 13v8"></path></svg>`;
 
-  const toggleJs = `const w=this.closest('.embedded-doc-wrapper');const c=w?.querySelector('.embedded-doc-frame-container');const t=w?.querySelector('.preview-btn-text');if(c&&c.hasAttribute('hidden')){c.removeAttribute('hidden');if(t)t.textContent='Bezárás';w.classList.add('is-preview-open');}else if(c){c.setAttribute('hidden','');if(t)t.textContent='Megtekintés';w.classList.remove('is-preview-open');}`;
+  const previewUrl = iframeSrc || absoluteSrc;
+  const toggleJs = `const w=this.closest('.embedded-doc-wrapper');if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){const u=w?.getAttribute('data-preview-url');if(u){window.open(u,'_blank','noopener,noreferrer');return;}}const c=w?.querySelector('.embedded-doc-frame-container');const t=w?.querySelector('.preview-btn-text');if(c&&c.hasAttribute('hidden')){c.removeAttribute('hidden');if(t)t.textContent='Bezárás';w.classList.add('is-preview-open');}else if(c){c.setAttribute('hidden','');if(t)t.textContent='Megtekintés';w.classList.remove('is-preview-open');}`;
 
   let titleHtml = `<span class="embedded-doc-title">${displayTitle}</span>`;
   let actionsHtml = '';
@@ -68,7 +69,7 @@ function buildEmbedHtml(src, title, siteUrl) {
   }
   actionsHtml += `<a href="${src}" download class="embedded-doc-btn btn-download" title="Dokumentum letöltése">${downloadIcon}<span>Letöltés</span></a>`;
 
-  return `<div class="embedded-doc-wrapper doc-type-${docType}" data-src="${src}" data-doc-type="${docType}"><div class="embedded-doc-header"><div class="embedded-doc-info"><span class="embedded-doc-icon-badge ${docType}">${iconSvg}</span><div class="embedded-doc-text">${titleHtml}<span class="embedded-doc-badge">${label}</span></div></div><div class="embedded-doc-actions">${actionsHtml}</div></div>${iframeSrc ? `<div class="embedded-doc-frame-container" hidden><iframe src="${iframeSrc}" class="embedded-doc-iframe" loading="lazy" title="${displayTitle}" frameborder="0" allowfullscreen></iframe></div>` : ''}</div>`;
+  return `<div class="embedded-doc-wrapper doc-type-${docType}" data-src="${src}" data-preview-url="${previewUrl}" data-doc-type="${docType}"><div class="embedded-doc-header"><div class="embedded-doc-info"><span class="embedded-doc-icon-badge ${docType}">${iconSvg}</span><div class="embedded-doc-text">${titleHtml}<span class="embedded-doc-badge">${label}</span></div></div><div class="embedded-doc-actions">${actionsHtml}</div></div>${iframeSrc ? `<div class="embedded-doc-frame-container" hidden><iframe src="${iframeSrc}" class="embedded-doc-iframe" loading="lazy" title="${displayTitle}" frameborder="0" allowfullscreen></iframe></div>` : ''}</div>`;
 }
 
 // Shortcode regex: handles straight and smart (typographic) quotes
