@@ -59,9 +59,9 @@ A **Kolumbia Sport Klub** (kolumbia17) hivatalos weboldalának forráskódja. A 
 │   ├── styles/
 │   │   └── global.css       # Globális CSS (CSS custom properties, dark mode, tipográfia, beágyazott doksik)
 │   └── utils/
-│       ├── rehype-document-embed.js # Egyedi Rehype plugin: Office (Excel, Word) és PDF néző / biztonsági háló
+│       ├── remark-document-embed.js # Egyedi Remark plugin: Office (Excel, Word) és PDF néző / biztonsági háló
 │       └── url.ts           # getUrl() helper: BASE_URL kezelése (Vercel / GitHub Pages kompatibilis)
-├── astro.config.mjs          # Astro konfiguráció (site URL, Rehype plugins)
+├── astro.config.mjs          # Astro konfiguráció (site URL, Remark plugins)
 ├── vercel.json               # Vercel beállítások (cleanUrls: true)
 ├── tsconfig.json
 └── TODO-DOMAIN.md            # Útmutató a saját domain aktiválásához
@@ -133,7 +133,9 @@ A CMS-en keresztül feltöltött képek és fájlok a `public/images/uploads/` m
 A Markdown szövegszerkesztő (`body`) támogatja az irodai dokumentumok (Excel táblázatok, Word dokumentumok, PowerPoint bemutatók, PDF-ek) interaktív beágyazását:
 
 1. **Egyedi CMS szerkesztő komponens:** A szerkesztő eszköztárában elérhető a **`📊 Dokumentum / Táblázat beágyazása`** gomb, amely egyszerű dialógusablakban kéri be a feltöltött fájlt és az opcionális címet (`[document-embed src="..." title="..."]`).
-2. **Astro Biztonsági Háló (Rehype Plugin):** Ha a szerkesztő tévedésből képként (`![](/images/uploads/tabla.xlsx)`) szúr be egy Excel, Word vagy PDF fájlt, az Astro **nem hoz létre törött `<img>` elemet**. Ehelyett felismeri a fájlkiterjesztést (`.xlsx`, `.xls`, `.csv`, `.docx`, `.doc`, `.pptx`, `.pdf`), és automatikusan beágyazza az **interaktív Microsoft Office Online Viewert** vagy PDF nézőt, kiegészítve letisztult letöltés és külön lapon megnyitás gombokkal.
+2. **Astro Biztonsági Háló (Remark Plugin):** Ha a szerkesztő tévedésből képként (`![](/images/uploads/tabla.xlsx)`) vagy sima linkként (`[Cím](/images/uploads/tabla.xlsx)`) szúr be egy Excel, Word vagy PDF fájlt, az Astro automatikusan felismeri a fájlkiterjesztést (`.xlsx`, `.xls`, `.csv`, `.docx`, `.doc`, `.pptx`, `.pdf`), és beágyazza az **interaktív Microsoft Office Online Viewert** vagy PDF nézőt, kiegészítve letisztult letöltés és külön lapon megnyitás gombokkal.
+
+   > **Technikai megjegyzés:** A megoldás egy **Remark plugin** (`src/utils/remark-document-embed.js`), amely a Markdown AST (MDAST) szintjén fut. Ez biztosítja, hogy az Astro Content Collections `render()` API-jával is kompatibilis legyen — a Rehype szint sajnos kihagyja a Content Collections pipeline-ját.
 
 ---
 
