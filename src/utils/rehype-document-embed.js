@@ -387,15 +387,17 @@ export default function rehypeDocumentEmbed(options = {}) {
         if (child.type === 'element' && child.tagName === 'p') {
           // Check for shortcode [document-embed src="..." title="..."]
           const textContent = getTextContent(child).trim();
-          const shortcodeMatch = textContent.match(/^\[document-embed\s+src=["'”“‘’]([^"'”“‘’]+)["'”“‘’](?:\s+title=["'”“‘’]([^"'”“‘’]*)["'”“‘’])?\]$/i);
-
-          if (shortcodeMatch) {
-            const src = shortcodeMatch[1];
-            const title = shortcodeMatch[2] || '';
-            const docNode = createDocumentNode(src, title, siteUrl);
-            if (docNode) {
-              parent.children[i] = docNode;
-              continue;
+          if (textContent.includes('[document-embed')) {
+            const shortcodeMatch = textContent.match(/\[document-embed\s+src=["'\u201c\u201d\u2018\u2019]([^"'\u201c\u201d\u2018\u2019]+)["'\u201c\u201d\u2018\u2019](?:\s+title=["'\u201c\u201d\u2018\u2019]([^"'\u201c\u201d\u2018\u2019]*)["'\u201c\u201d\u2018\u2019])?\]/i);
+            
+            if (shortcodeMatch) {
+              const src = shortcodeMatch[1];
+              const title = shortcodeMatch[2] || '';
+              const docNode = createDocumentNode(src, title, siteUrl);
+              if (docNode) {
+                parent.children[i] = docNode;
+                continue;
+              }
             }
           }
 
