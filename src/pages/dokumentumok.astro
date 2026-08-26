@@ -428,6 +428,20 @@ const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.va
             previewBtnText.textContent = 'Megtekintés';
           }
         } else {
+          // Close any other currently open previews
+          document.querySelectorAll<HTMLElement>('.doc-card.is-preview-open').forEach((otherCard) => {
+            if (otherCard !== card) {
+              otherCard.classList.remove('is-preview-open');
+              const otherWrapper = otherCard.querySelector<HTMLElement>('.doc-preview-wrapper');
+              if (otherWrapper) otherWrapper.hidden = true;
+              otherCard.querySelectorAll<HTMLElement>('.js-preview-trigger').forEach((t) => t.setAttribute('aria-expanded', 'false'));
+              const otherBtnText = otherCard.querySelector<HTMLElement>('.preview-btn-text');
+              if (otherBtnText) {
+                otherBtnText.textContent = 'Megtekintés';
+              }
+            }
+          });
+
           // Open preview: unhide wrapper first so dimensions exist
           card.classList.add('is-preview-open');
           previewWrapper.hidden = false;
