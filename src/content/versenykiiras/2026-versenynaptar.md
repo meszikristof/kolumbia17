@@ -4,4 +4,4 @@ date: 2026-08-24T16:07
 season: '2026'
 ---
 
-![](/images/uploads/Hivatalos%20fiatal%20program%202026..jpg)
+![](../../assets/images/uploads/Hivatalos%20fiatal%20program%202026..jpg)

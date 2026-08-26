@@ -1,9 +1,12 @@
 ---
 import { getUrl } from '../utils/url';
+import { Image } from 'astro:assets';
+
+import type { ImageMetadata } from 'astro';
 
 interface Props {
   title: string;
-  bgImage?: string;
+  bgImage?: ImageMetadata;
   bgVideo?: string;
   hideHeroTitle?: boolean;
 }
@@ -18,8 +21,8 @@ const hasCustomBackground = Boolean(bgImage || bgVideo);
       <source src={getUrl(bgVideo)} type="video/mp4" />
     </video>
   ) : bgImage ? (
-    <img 
-      src={getUrl(bgImage)} 
+    <Image 
+      src={bgImage as any} 
       alt={title || "Kolumbia Sport Klub"} 
       class="hero-bg hero-image" 
       loading="eager" 

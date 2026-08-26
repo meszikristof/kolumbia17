@@ -16,7 +16,7 @@ const { title, description = "A Kolumbia Sport Klub hivatalos weboldala." } =
   Astro.props;
 
 const homeEntry = await getEntry("pages", "home");
-const faviconUrl = homeEntry?.data.logo || "/favicon.svg";
+const faviconUrl = homeEntry?.data.logo?.src || "/favicon.svg";
 ---
 
 <!doctype html>
@@ -30,7 +30,7 @@ const faviconUrl = homeEntry?.data.logo || "/favicon.svg";
     <ClientRouter />
     {
       homeEntry?.data.logo && (
-        <link rel="preload" as="image" href={getUrl(homeEntry.data.logo)} />
+        <link rel="preload" as="image" href={getUrl(homeEntry.data.logo.src)} />
       )
     }
 
@@ -62,5 +62,82 @@ const faviconUrl = homeEntry?.data.logo || "/favicon.svg";
     </main>
     <Footer />
     <Analytics />
+    <div id="img-lightbox" class="img-lightbox" aria-hidden="true">
+      <div class="img-lightbox-backdrop"></div>
+      <img class="img-lightbox-img" src="" alt="" />
+    </div>
+
+    <style is:global>
+      .img-lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .img-lightbox.is-open {
+        pointer-events: auto;
+        opacity: 1;
+      }
+      .img-lightbox-backdrop {
+        position: absolute;
+        inset: 0;
+        background: var(--bg-primary);
+        opacity: 0.92;
+      }
+      .img-lightbox-img {
+        position: relative;
+        max-width: calc(100vw - 48px);
+        max-height: calc(100vh - 48px);
+        object-fit: contain;
+        cursor: zoom-out;
+        transform: scale(0.92);
+        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        border-radius: 4px;
+      }
+      .img-lightbox.is-open .img-lightbox-img {
+        transform: scale(1);
+      }
+    </style>
+
+    <script>
+      function setupLightbox() {
+        const lightbox = document.getElementById("img-lightbox");
+        const lightboxImg = lightbox?.querySelector(".img-lightbox-img") as HTMLImageElement | null;
+        if (!lightbox || !lightboxImg) return;
+
+        function closeLightbox() {
+          lightbox!.classList.remove("is-open");
+          lightbox!.setAttribute("aria-hidden", "true");
+        }
+
+        // Kattintás a képre -> megnyitás
+        document.addEventListener("click", (e: MouseEvent) => {
+          const target = e.target as HTMLElement;
+          if (target.tagName === "IMG" && target.closest(".prose, .article-image")) {
+            const img = target as HTMLImageElement;
+            lightboxImg!.src = img.src;
+            lightboxImg!.alt = img.alt || "";
+            lightbox!.classList.add("is-open");
+            lightbox!.setAttribute("aria-hidden", "false");
+          }
+        });
+
+        // Kattintás a lightboxra -> bezárás
+        lightbox.addEventListener("click", closeLightbox);
+
+        // ESC gomb -> bezárás
+        document.addEventListener("keydown", (e: KeyboardEvent) => {
+          if (e.key === "Escape") closeLightbox();
+        });
+      }
+
+      setupLightbox();
+      document.addEventListener("astro:page-load", setupLightbox);
+    </script>
   </body>
 </html>

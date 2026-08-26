@@ -3,24 +3,24 @@ import { glob } from 'astro/loaders';
 
 const hirekCollection = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/hirek" }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     date: z.coerce.date(),
     summary: z.string().optional(),
-    featuredImage: z.string().optional(),
+    featuredImage: image().optional(),
     tags: z.array(z.string()).optional(),
   }),
 });
 
 const eredmenyekCollection = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/eredmenyek" }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     date: z.coerce.date(),
     location: z.string().optional(),
     type: z.enum(['saját', 'külső_link']),
     externalUrl: z.string().optional(),
-    featuredImage: z.string().optional(),
+    featuredImage: image().optional(),
   }),
 });
 
@@ -44,10 +44,10 @@ const dokumentumokCollection = defineCollection({
 
 const pagesCollection = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/pages" }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
-    logo: z.string().optional(),
-    bgImage: z.string().optional(),
+    logo: image().optional(),
+    bgImage: image().optional(),
     bgVideo: z.string().optional(),
     hideHeroTitle: z.boolean().optional(),
     email: z.string().optional(),

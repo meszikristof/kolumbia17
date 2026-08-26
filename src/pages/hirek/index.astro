@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { getUrl } from '../../utils/url';
+import { Image } from 'astro:assets';
 
 const allNews = await getCollection('hirek');
 const sortedNews = allNews.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -16,7 +17,7 @@ const sortedNews = allNews.sort((a, b) => b.data.date.valueOf() - a.data.date.va
         sortedNews.map((news) => (
           <article class="news-card">
             {news.data.featuredImage && (
-              <img src={getUrl(news.data.featuredImage)} alt={news.data.title} class="news-image" />
+              <Image src={news.data.featuredImage} alt={news.data.title} class="news-image" />
             )}
             <div class="news-card-content">
               <time class="news-date">{news.data.date.toLocaleDateString('hu-HU')}</time>

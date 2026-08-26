@@ -4,8 +4,8 @@ backend:
   branch: develop
   base_url: "https://sveltia-cms-auth.meszikristof.workers.dev" 
 
-media_folder: "public/images/uploads"
-public_folder: "/images/uploads"
+media_folder: "src/assets/images/uploads"
+public_folder: "../../assets/images/uploads"
 
 collections:
   - name: "hirek"
@@ -54,7 +54,7 @@ collections:
     fields:
       - { label: "Cím", name: "title", widget: "string" }
       - { label: "Dátum", name: "date", widget: "datetime" }
-      - { label: "Dokumentum (PDF)", name: "pdf", widget: "file", required: false }
+      - { label: "Dokumentum (PDF)", name: "pdf", widget: "file", required: false, media_folder: "public/documents", public_folder: "/documents" }
       - { label: "Leírás", name: "body", widget: "markdown", required: false }
 
   - name: "pages"
@@ -68,7 +68,7 @@ collections:
           - { label: "Cím felirat elrejtése a háttérképen", name: "hideHeroTitle", widget: "boolean", default: false, required: false }
           - { label: "Egyedi logó", name: "logo", widget: "image", required: false }
           - { label: "Háttérkép", name: "bgImage", widget: "image", required: false }
-          - { label: "Háttérvideó", name: "bgVideo", widget: "file", required: false }
+          - { label: "Háttérvideó", name: "bgVideo", widget: "file", required: false, media_folder: "public/videos", public_folder: "/videos" }
           - { label: "Bemutatkozás szövege", name: "body", widget: "markdown" }
       - label: "Rólunk"
         name: "rolunk"

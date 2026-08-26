@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import { getEntry, getCollection, render } from 'astro:content';
 import { getUrl } from '../utils/url';
+import { Image } from 'astro:assets';
 
 const homeEntry = await getEntry('pages', 'home');
 const { Content } = homeEntry ? await render(homeEntry) : { Content: () => null };
@@ -37,7 +38,7 @@ const latestNews = allNews
         latestNews.map((news) => (
           <article class="news-card">
             {news.data.featuredImage && (
-              <img src={getUrl(news.data.featuredImage)} alt={news.data.title} class="news-image" />
+              <Image src={news.data.featuredImage} alt={news.data.title} class="news-image" />
             )}
             <div class="news-card-content">
               <time class="news-date">{news.data.date.toLocaleDateString('hu-HU')}</time>

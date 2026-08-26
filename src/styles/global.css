@@ -32,6 +32,10 @@ html.dark {
   --border-medium: #354560;
 }
 
+html.dark .prose img {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -61,6 +65,16 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   line-height: 1.2;
   margin-bottom: 1rem;
+}
+
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 2rem auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  cursor: zoom-in;
 }
 
 a {
