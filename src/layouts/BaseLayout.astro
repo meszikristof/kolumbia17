@@ -164,7 +164,18 @@ const faviconUrl = homeEntry?.data.logo?.src || "/favicon.svg";
         // az Astro ClientRouter (View Transitions) elkapja a kattintást és navigáljon.
         document.addEventListener("click", function(e) {
           var target = e.target;
+          // Ha közvetlenül a linkre vagy a csempére kattintottak, amiben van .js-modal-link
           var link = target.closest && target.closest("a.js-modal-link");
+          if (!link && target.closest) {
+            // Ha a felhasználó egy másik linkre vagy gombra kattintott, ne írjuk felül
+            var otherInteractive = target.closest("a, button");
+            if (otherInteractive) return;
+
+            var card = target.closest(".news-card, .announcement-card, .result-card");
+            if (card) {
+              link = card.querySelector("a.js-modal-link");
+            }
+          }
           if (!link) return;
 
           e.preventDefault();
