@@ -178,6 +178,14 @@ const faviconUrl = homeEntry?.data.logo?.src || "/favicon.svg";
           }
           if (!link) return;
 
+          // Mobilon és tableten (1024px-ig) megtartjuk a klasszikus, teljes oldalas navigációs működést lebegő ablak helyett
+          if (window.innerWidth <= 1024) {
+            if (target !== link && !link.contains(target)) {
+              link.click();
+            }
+            return;
+          }
+
           e.preventDefault();
           e.stopImmediatePropagation();
 
