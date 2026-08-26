@@ -1,0 +1,76 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Impresszum">
+  <div class="container page-content">
+    <article class="privacy-main">
+      <h1 class="page-title">Impresszum</h1>
+
+      <div class="privacy-body prose">
+        <h2>A weboldal üzemeltetője</h2>
+        <p><strong>Név:</strong> Kolumbia Sport Klub Versenykerület</p>
+        <p><strong>Székhely:</strong> 2225 Üllő, Gyömrői út 9.</p>
+        <p>
+          <strong>Hivatalos képviselő:</strong> Mészáros János
+        </p>
+        <p>
+          <strong>Nyilvántartó hatóság:</strong> Fővárosi Törvényszék
+        </p>
+        <p>
+          <strong
+            >Bírósági nyilvántartási szám (civil nyilvántartási szám):</strong
+          > 01-02-0003464
+        </p>
+        <p><strong>Adószám:</strong> 19662817-1-13</p>
+        <p><strong>E-mail cím:</strong> m.janoskol@gmail.com</p>
+        <p><strong>Telefonszám:</strong> +36 70 9490646</p>
+        <p><strong>Felelős szerkesztő:</strong> Mészáros János</p>
+
+        <h2>Tárhelyszolgáltató adatai</h2>
+        <p><strong>Név:</strong> Vercel Inc.</p>
+        <p>
+          <strong>Székhely:</strong> 440 N Barranca Ave #4133, Covina, CA 91723, USA
+        </p>
+        <p><strong>E-mail cím:</strong> privacy@vercel.com</p>
+      </div>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-content {
+    padding: 3rem 1.5rem 5rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .page-title {
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+  }
+
+  .privacy-body {
+    font-size: 1.125rem;
+    color: var(--text-primary);
+    line-height: 1.7;
+  }
+
+  .privacy-body h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 0.5rem;
+  }
+
+  .privacy-body p {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+  }
+
+  .privacy-body strong {
+    color: var(--text-primary);
+  }
+</style>

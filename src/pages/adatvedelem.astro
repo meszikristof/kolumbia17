@@ -1,0 +1,67 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Adatvédelmi tájékoztató">
+  <div class="container page-content">
+    <article class="privacy-main">
+      <h1 class="page-title">Adatvédelmi tájékoztató</h1>
+
+      <div class="privacy-body prose">
+        <p>
+          Ez a weboldal kizárólag információs célokat szolgál. A weboldalon nem
+          működik kapcsolatfelvételi űrlap, nem kérünk be és nem tárolunk
+          semmilyen személyes adatot a látogatókról.
+        </p>
+
+        <h2>Sütik (Cookies) használata</h2>
+        <p>
+          A weboldal nem használ nyomkövető sütiket (tracking cookies) és nem
+          gyűjt analitikai adatokat a felhasználói viselkedésről. Az egyetlen
+          technikai adat, amit a böngészője eltárolhat, a választott vizuális
+          téma (világos vagy sötét mód) helyi preferenciája (localStorage),
+          amely nem minősül személyes adatnak, és csak a weboldal kényelmi
+          funkcióit szolgálja.
+        </p>
+
+        <h2>Kapcsolatfelvétel</h2>
+        <p>
+          Amennyiben e-mailben vagy telefonon veszi fel velünk a kapcsolatot, az
+          elküldött e-mail címet vagy telefonszámot kizárólag a megkeresés
+          megválaszolása céljából kezeljük, azokat harmadik félnek nem adjuk ki.
+        </p>
+      </div>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-content {
+    padding: 3rem 1.5rem 5rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .page-title {
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+  }
+
+  .privacy-body {
+    font-size: 1.125rem;
+    color: var(--text-primary);
+    line-height: 1.7;
+  }
+
+  .privacy-body h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+  }
+
+  .privacy-body p {
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+  }
+</style>

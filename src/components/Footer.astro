@@ -1,0 +1,34 @@
+---
+import { getUrl } from "../utils/url";
+---
+
+<footer class="footer-bottom">
+  <p>
+    &copy; {new Date().getFullYear()} Kolumbia Sport Klub. Minden jog fenntartva.
+    | <a href={getUrl("/adatvedelem")} class="footer-link">Adatvédelmi tájékoztató</a> |
+    <a href={getUrl("/impresszum")} class="footer-link">Impresszum</a>
+  </p>
+</footer>
+
+<style>
+  .footer-bottom {
+    text-align: center;
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+    border-top: 1px solid var(--border-light);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-top: auto;
+  }
+
+  .footer-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer-link:hover {
+    color: var(--accent-sky);
+    text-decoration: underline;
+  }
+</style>

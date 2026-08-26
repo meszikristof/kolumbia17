@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getUrl } from '../../utils/url';
+import { Image } from 'astro:assets';
+
+const allNews = await getCollection('hirek');
+const sortedNews = allNews.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title="Hírek">
+  <div class="container page-content">
+    <h1 class="page-title">Hírek</h1>
+    
+    <div class="news-grid">
+      {sortedNews.length > 0 ? (
+        sortedNews.map((news) => (
+          <article class="news-card">
+            {news.data.featuredImage && (
+              <Image src={news.data.featuredImage} alt={news.data.title} class="news-image" />
+            )}
+            <div class="news-card-content">
+              <time class="news-date">{news.data.date.toLocaleDateString('hu-HU')}</time>
+              <h2><a href={getUrl(`/hirek/${news.id}`)} class="js-modal-link">{news.data.title}</a></h2>
+              {news.data.summary && <p class="news-summary">{news.data.summary}</p>}
+              {news.data.tags && news.data.tags.length > 0 && (
+                <div class="news-tags">
+                  {news.data.tags.map(tag => <span class="tag">{tag}</span>)}
+                </div>
+              )}
+            </div>
+          </article>
+        ))
+      ) : (
+        <p class="no-content">Jelenleg nincsenek hírek.</p>
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-content {
+    padding: 3rem 1.5rem 5rem;
+  }
+  
+  .page-title {
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+  }
+  
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .news-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .news-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  }
+  
+  .news-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .news-card-content {
+    padding: 1.5rem;
+  }
+
+  .news-card-content > :last-child {
+    margin-bottom: 0;
+  }
+  
+  .news-date {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--accent-sky);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .news-card h2 {
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+  }
+  
+  .news-card h2 a {
+    color: var(--text-primary);
+  }
+  
+  .news-card h2 a:hover {
+    color: var(--accent-sky);
+  }
+  
+  .news-summary {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+  
+  .news-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .tag {
+    background-color: var(--bg-accent);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+  }
+  
+  .no-content {
+    color: var(--text-secondary);
+  }
+</style>

@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getUrl } from '../../utils/url';
+
+const allResults = await getCollection('eredmenyek');
+const sortedResults = allResults.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title="Eredmények">
+  <div class="container page-content">
+    <h1 class="page-title">Eredmények</h1>
+    
+    <div class="results-grid">
+      {sortedResults.length > 0 ? (
+        sortedResults.map((result) => (
+          <article class="result-card">
+            <div class="result-card-content">
+              <time class="result-date">{result.data.date.toLocaleDateString('hu-HU')}</time>
+              <h2>
+                {result.data.type === 'külső_link' && result.data.externalUrl ? (
+                  <a href={result.data.externalUrl} target="_blank" rel="noopener noreferrer">
+                    {result.data.title}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="external-icon">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                  </a>
+                ) : (
+                  <a href={getUrl(`/eredmenyek/${result.id}`)} class="js-modal-link">{result.data.title}</a>
+                )}
+              </h2>
+              {result.data.location && <p class="result-location">Helyszín: {result.data.location}</p>}
+            </div>
+          </article>
+        ))
+      ) : (
+        <p class="no-content">Jelenleg nincsenek feltöltött eredmények.</p>
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-content {
+    padding: 3rem 1.5rem 5rem;
+  }
+  
+  .page-title {
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+  }
+  
+  .results-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+  
+  .result-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .result-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+  }
+  
+  .result-card-content {
+    padding: 1.5rem;
+  }
+
+  .result-card-content > :last-child {
+    margin-bottom: 0;
+  }
+  
+  .result-date {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--accent-sky);
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+  
+  .result-card h2 {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+  }
+  
+  .result-card h2 a {
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .result-card h2 a:hover {
+    color: var(--accent-sky);
+  }
+  
+  .external-icon {
+    color: var(--text-secondary);
+  }
+  
+  .result-location {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+  
+  .no-content {
+    color: var(--text-secondary);
+  }
+</style>

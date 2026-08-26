@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import { getEntry, getCollection, render } from 'astro:content';
+import { getUrl } from '../utils/url';
+import { Image } from 'astro:assets';
+
+const homeEntry = await getEntry('pages', 'home');
+const { Content } = homeEntry ? await render(homeEntry) : { Content: () => null };
+const allNews = await getCollection('hirek');
+const latestNews = allNews
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout title={homeEntry?.data.title || "Főoldal"}>
+  <Hero 
+    title={homeEntry?.data.title || "Kolumbia Sport Klub"}
+    bgImage={homeEntry?.data.bgImage}
+    bgVideo={homeEntry?.data.bgVideo}
+    hideHeroTitle={homeEntry?.data.hideHeroTitle}
+  />
+  
+  <section class="intro-section container">
+    <div class="intro-content prose">
+      {homeEntry ? (
+        <Content />
+      ) : (
+        <p>A Kolumbia Sport Klub bemutatkozása...</p>
+      )}
+    </div>
+  </section>
+
+  <section class="news-section container">
+    <h2 class="section-title">Legfrissebb Hírek</h2>
+    <div class="news-grid">
+      {latestNews.length > 0 ? (
+        latestNews.map((news) => (
+          <article class="news-card">
+            {news.data.featuredImage && (
+              <Image src={news.data.featuredImage} alt={news.data.title} class="news-image" />
+            )}
+            <div class="news-card-content">
+              <time class="news-date">{news.data.date.toLocaleDateString('hu-HU')}</time>
+              <h3><a href={getUrl(`/hirek/${news.id}`)} class="js-modal-link">{news.data.title}</a></h3>
+              {news.data.summary && <p class="news-summary">{news.data.summary}</p>}
+            </div>
+          </article>
+        ))
+      ) : (
+        <p class="no-content">Jelenleg nincsenek hírek.</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro-section {
+    padding: 4rem 1.5rem;
+    text-align: center;
+    max-width: 800px;
+  }
+  
+  .intro-content {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+  }
+  
+  .news-section {
+    padding: 2rem 1.5rem 5rem;
+  }
+  
+  .section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--text-primary);
+  }
+  
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .news-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .news-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  }
+  
+  .news-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .news-card-content {
+    padding: 1.5rem;
+  }
+
+  .news-card-content > :last-child {
+    margin-bottom: 0;
+  }
+  
+  .news-date {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--accent-sky);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .news-card h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+  }
+  
+  .news-card h3 a {
+    color: var(--text-primary);
+  }
+  
+  .news-card h3 a:hover {
+    color: var(--accent-sky);
+  }
+  
+  .news-summary {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+  
+  .no-content {
+    text-align: center;
+    color: var(--text-secondary);
+    grid-column: 1 / -1;
+  }
+</style>

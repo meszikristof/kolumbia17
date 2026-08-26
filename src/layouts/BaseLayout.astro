@@ -1,0 +1,261 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Analytics from "@vercel/analytics/astro";
+import { ClientRouter } from "astro:transitions";
+import { getEntry } from "astro:content";
+import { getUrl } from "../utils/url";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "A Kolumbia Sport Klub hivatalos weboldala." } =
+  Astro.props;
+
+const homeEntry = await getEntry("pages", "home");
+const faviconUrl = homeEntry?.data.logo?.src || "/favicon.svg";
+---
+
+<!doctype html>
+<html lang="hu">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | Kolumbia Sport Klub</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/png" href={getUrl(faviconUrl)} />
+    <ClientRouter />
+    {
+      homeEntry?.data.logo && (
+        <link rel="preload" as="image" href={getUrl(homeEntry.data.logo.src)} />
+      )
+    }
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Theme Check inline script to prevent flash of incorrect theme -->
+    <script is:inline>
+      if (
+        localStorage.getItem("theme") === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <Analytics />
+
+    <div id="content-modal" class="content-modal" aria-hidden="true">
+      <div class="content-modal-backdrop"></div>
+      <div class="content-modal-window">
+        <button type="button" class="content-modal-close" aria-label="Bezárás">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <div class="content-modal-spinner" hidden>
+          <div class="spinner"></div>
+        </div>
+        <div class="content-modal-body"></div>
+      </div>
+    </div>
+
+    <div id="img-lightbox" class="img-lightbox" aria-hidden="true">
+      <div class="img-lightbox-backdrop"></div>
+      <img class="img-lightbox-img" src="" alt="" />
+    </div>
+
+    <style is:global>
+      .img-lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .img-lightbox.is-open {
+        pointer-events: auto;
+        opacity: 1;
+      }
+      .img-lightbox-backdrop {
+        position: absolute;
+        inset: 0;
+        background: var(--bg-primary);
+        opacity: 0.92;
+      }
+      .img-lightbox-img {
+        position: relative;
+        max-width: calc(100vw - 48px);
+        max-height: calc(100vh - 48px);
+        object-fit: contain;
+        cursor: zoom-out;
+        transform: scale(0.92);
+        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        border-radius: 4px;
+      }
+      .img-lightbox.is-open .img-lightbox-img {
+        transform: scale(1);
+      }
+    </style>
+
+    <script>
+      function setupLightbox() {
+        const lightbox = document.getElementById("img-lightbox");
+        const lightboxImg = lightbox?.querySelector(".img-lightbox-img") as HTMLImageElement | null;
+        if (!lightbox || !lightboxImg) return;
+
+        function closeLightbox() {
+          lightbox!.classList.remove("is-open");
+          lightbox!.setAttribute("aria-hidden", "true");
+        }
+
+        // Kattintás a képre -> megnyitás
+        document.addEventListener("click", (e: MouseEvent) => {
+          const target = e.target as HTMLElement;
+          if (target.tagName === "IMG" && target.closest(".prose, .article-image")) {
+            const img = target as HTMLImageElement;
+            lightboxImg!.src = img.src;
+            lightboxImg!.alt = img.alt || "";
+            lightbox!.classList.add("is-open");
+            lightbox!.setAttribute("aria-hidden", "false");
+          }
+        });
+
+        // Kattintás a lightboxra -> bezárás
+        lightbox.addEventListener("click", closeLightbox);
+
+        // ESC gomb -> bezárás
+        document.addEventListener("keydown", (e: KeyboardEvent) => {
+          if (e.key === "Escape") closeLightbox();
+        });
+      }
+
+      setupLightbox();
+      document.addEventListener("astro:page-load", setupLightbox);
+    </script>
+
+    <script is:inline>
+      (function() {
+        // Guard: ne regisztráljunk duplán document-szintű listenereket
+        if (window._contentModalReady) return;
+        window._contentModalReady = true;
+
+        // Capture phase kattintás-elfogó: megakadályozza, hogy
+        // az Astro ClientRouter (View Transitions) elkapja a kattintást és navigáljon.
+        document.addEventListener("click", function(e) {
+          var target = e.target;
+          // Ha közvetlenül a linkre vagy a csempére kattintottak, amiben van .js-modal-link
+          var link = target.closest && target.closest("a.js-modal-link");
+          if (!link && target.closest) {
+            // Ha a felhasználó egy másik linkre vagy gombra kattintott, ne írjuk felül
+            var otherInteractive = target.closest("a, button");
+            if (otherInteractive) return;
+
+            var card = target.closest(".news-card, .announcement-card, .result-card");
+            if (card) {
+              link = card.querySelector("a.js-modal-link");
+            }
+          }
+          if (!link) return;
+
+          // Mobilon és tableten (1024px-ig) megtartjuk a klasszikus, teljes oldalas navigációs működést lebegő ablak helyett
+          if (window.innerWidth <= 1024) {
+            if (target !== link && !link.contains(target)) {
+              link.click();
+            }
+            return;
+          }
+
+          e.preventDefault();
+          e.stopImmediatePropagation();
+
+          var modal = document.getElementById("content-modal");
+          var modalBody = modal && modal.querySelector(".content-modal-body");
+          var spinner = modal && modal.querySelector(".content-modal-spinner");
+          if (!modal || !modalBody || !spinner) return;
+
+          var url = link.href;
+
+          modalBody.innerHTML = "";
+          spinner.removeAttribute("hidden");
+          modal.classList.add("is-open");
+          modal.setAttribute("aria-hidden", "false");
+          document.body.style.overflow = "hidden";
+
+          fetch(url)
+            .then(function(response) { return response.text(); })
+            .then(function(html) {
+              var parser = new DOMParser();
+              var doc = parser.parseFromString(html, "text/html");
+              var content = doc.querySelector(".page-content");
+              if (content) {
+                var backLink = content.querySelector(".back-link");
+                if (backLink && backLink.parentElement) {
+                  backLink.parentElement.remove();
+                }
+                modalBody.appendChild(content);
+              } else {
+                modalBody.innerHTML = "<p>Nem sikerült betölteni a tartalmat.</p>";
+              }
+            })
+            .catch(function(error) {
+              console.error("Error fetching modal content:", error);
+              modalBody.innerHTML = "<p>Hiba történt a tartalom betöltése közben.</p>";
+            })
+            .finally(function() {
+              spinner.setAttribute("hidden", "");
+            });
+        }, true);
+
+        // Bezárás: backdrop, X gomb, ESC
+        function closeContentModal() {
+          var modal = document.getElementById("content-modal");
+          var modalBody = modal && modal.querySelector(".content-modal-body");
+          if (!modal) return;
+          modal.classList.remove("is-open");
+          modal.setAttribute("aria-hidden", "true");
+          document.body.style.overflow = "";
+          setTimeout(function() {
+            if (modalBody && !modal.classList.contains("is-open")) {
+              modalBody.innerHTML = "";
+            }
+          }, 300);
+        }
+
+        document.addEventListener("click", function(e) {
+          var target = e.target;
+          if (target.closest && (target.closest(".content-modal-backdrop") || target.closest(".content-modal-close"))) {
+            closeContentModal();
+          }
+        });
+
+        document.addEventListener("keydown", function(e) {
+          var modal = document.getElementById("content-modal");
+          if (e.key === "Escape" && modal && modal.classList.contains("is-open")) {
+            closeContentModal();
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

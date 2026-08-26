@@ -1,0 +1,272 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry, render } from 'astro:content';
+
+const rolunkEntry = await getEntry('pages', 'rolunk');
+const { Content } = rolunkEntry ? await render(rolunkEntry) : { Content: () => null };
+
+const formatTelHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, '')}`;
+---
+
+<BaseLayout title={rolunkEntry?.data.title || "Rólunk"}>
+  <div class="container page-content">
+    <div class="about-grid">
+      <article class="about-main">
+        <h1 class="page-title">{rolunkEntry?.data.title || "Rólunk"}</h1>
+        <div class="about-body prose">
+          {rolunkEntry ? <Content /> : <p>Rólunk szöveg feltöltés alatt...</p>}
+        </div>
+      </article>
+      
+      <aside class="about-sidebar">
+        <div class="officials-card">
+          <div class="basic-info-section">
+            <h2 class="card-section-title">Alapadatok</h2>
+            <ul class="basic-info-list">
+              <li>
+                <span class="info-label">Név:</span>
+                <span class="info-value">{rolunkEntry?.data.orgName || "Kolumbia Sport Klub Versenykerület"}</span>
+              </li>
+              <li>
+                <span class="info-label">Cím:</span>
+                <span class="info-value">{rolunkEntry?.data.address || "2225 Üllő, Gyömrői út 9."}</span>
+              </li>
+              <li>
+                <span class="info-label">Adószám:</span>
+                <span class="info-value">{rolunkEntry?.data.taxNumber || "19662817-1-13"}</span>
+              </li>
+            </ul>
+          </div>
+
+          {rolunkEntry?.data.officials && rolunkEntry.data.officials.length > 0 && (
+            <div class="officials-section">
+              <h2 class="card-section-title">Választott tisztségviselők</h2>
+              
+              <div class="officials-groups">
+                {rolunkEntry.data.officials.map((group) => (
+                  <div class="official-group">
+                    <h3 class="group-title">{group.groupName}</h3>
+                    <ul class="members-list">
+                      {group.members.map((member) => (
+                        <li class="member-item">
+                          <div class="member-header">
+                            <span class="member-role">{member.role}</span>
+                            <span class="member-name">{member.name}</span>
+                          </div>
+                          {(member.phone || member.email) && (
+                            <div class="member-contacts">
+                              {member.phone && (
+                                <a href={formatTelHref(member.phone)} class="member-contact-link" title={`Hívás: ${member.phone}`}>
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                  </svg>
+                                  <span>{member.phone}</span>
+                                </a>
+                              )}
+                              {member.email && (
+                                <a href={`mailto:${member.email}`} class="member-contact-link" title={`Email: ${member.email}`}>
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                  </svg>
+                                  <span>{member.email}</span>
+                                </a>
+                              )}
+                            </div>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-content {
+    padding: 3rem 1.5rem 5rem;
+  }
+  
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  @media (min-width: 900px) {
+    .about-grid {
+      grid-template-columns: 1fr 380px;
+    }
+  }
+  
+  .page-title {
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+  }
+  
+  .about-body {
+    font-size: 1.125rem;
+    color: var(--text-primary);
+    line-height: 1.7;
+  }
+  
+  .about-body :global(p) {
+    margin-bottom: 1.5rem;
+  }
+  
+  .officials-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  
+  .card-section-title {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .basic-info-section {
+    margin-bottom: 2rem;
+  }
+
+  .basic-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .basic-info-list li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    font-size: 0.95rem;
+  }
+
+  .info-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent-sky);
+  }
+
+  .info-value {
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .officials-section {
+    border-top: 1px solid var(--border-light);
+    padding-top: 1.5rem;
+  }
+
+  .officials-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .official-group {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  .group-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent-sky);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.75rem 0;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px dashed var(--border-light);
+  }
+
+  .members-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .member-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .member-item:not(:last-child) {
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .member-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .member-role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--accent-sky);
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  .member-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .member-contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-left: 0.25rem;
+  }
+
+  .member-contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+    word-break: break-all;
+  }
+
+  .member-contact-link:hover {
+    color: var(--accent-sky);
+  }
+
+  .member-contact-link svg {
+    color: var(--accent-sky);
+    flex-shrink: 0;
+  }
+</style>
