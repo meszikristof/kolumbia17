@@ -28,7 +28,7 @@ const sortedResults = allResults.sort((a, b) => b.data.date.valueOf() - a.data.d
                     </svg>
                   </a>
                 ) : (
-                  <a href={getUrl(`/eredmenyek/${result.id}`)}>{result.data.title}</a>
+                  <a href={getUrl(`/eredmenyek/${result.id}`)} class="js-modal-link">{result.data.title}</a>
                 )}
               </h2>
               {result.data.location && <p class="result-location">Helyszín: {result.data.location}</p>}
