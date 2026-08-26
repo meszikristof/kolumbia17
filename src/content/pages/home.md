@@ -1,8 +1,8 @@
 ---
 title: Kolumbia Sport Klub
 hideHeroTitle: true
-logo: ../../assets/images/uploads/logo.png
-bgImage: ../../assets/images/fooldal-hatter.jpg
+logo: /src/assets/images/uploads/logo.png
+bgImage: /src/assets/images/fooldal-hatter.jpg
 bgVideo: ''
 ---
 

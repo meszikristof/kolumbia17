@@ -5,7 +5,7 @@ backend:
   base_url: "https://sveltia-cms-auth.meszikristof.workers.dev" 
 
 media_folder: "src/assets/images/uploads"
-public_folder: "../../assets/images/uploads"
+public_folder: "/src/assets/images/uploads"
 
 collections:
   - name: "hirek"
