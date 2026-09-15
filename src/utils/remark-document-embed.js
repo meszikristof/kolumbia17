@@ -5,7 +5,7 @@
  */
 import { visit, SKIP } from 'unist-util-visit';
 
-const SITE_URL = 'https://kolumbia17.vercel.app';
+const SITE_URL = 'https://kolumbia17.hu';
 
 const DOCUMENT_EXTENSIONS = ['.xlsx', '.xls', '.ods', '.csv', '.docx', '.doc', '.odt', '.pdf', '.pptx', '.ppt', '.odp'];
 

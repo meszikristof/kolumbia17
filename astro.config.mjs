@@ -4,10 +4,10 @@ import remarkDocumentEmbed from './src/utils/remark-document-embed.js';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://kolumbia17.vercel.app',
+  site: 'https://kolumbia17.hu',
   markdown: {
     remarkPlugins: [
-      [remarkDocumentEmbed, { site: 'https://kolumbia17.vercel.app' }],
+      [remarkDocumentEmbed, { site: 'https://kolumbia17.hu' }],
     ],
   },
 });

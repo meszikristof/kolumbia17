@@ -2,10 +2,8 @@
 
 A **Kolumbia Sport Klub** (kolumbia17) hivatalos weboldalának forráskódja. A projekt modern, gyors statikus weboldalként (SSG) működik [Astro](https://astro.build/) keretrendszer segítségével. A tartalmakat a [Sveltia CMS](https://github.com/sveltia/sveltia-cms) kezeli, a hitelesítéshez egy dedikált Cloudflare Workers-alapú OAuth proxy fut.
 
-**Élő oldal:** https://kolumbia17.vercel.app  
-**Admin felület:** https://kolumbia17.vercel.app/admin  
-**Tervezett domain:** https://www.kolumbia17.hu *(lásd: [TODO-DOMAIN.md](./TODO-DOMAIN.md))*
-
+**Élő oldal:** https://kolumbia17.hu  
+**Admin felület:** https://kolumbia17.hu/admin
 ---
 
 ## 🚀 Technológiai Stack
@@ -112,7 +110,7 @@ A weboldal a [Sveltia CMS](https://github.com/sveltia/sveltia-cms)-t használja 
 
 ### Admin felület elérése
 
-Az admin felület a `/admin` útvonalon érhető el (pl. `https://kolumbia17.vercel.app/admin`). Belépéshez GitHub fiók szükséges, amelynek van írási jogosultsága a repóhoz.
+Az admin felület a `/admin` útvonalon érhető el (pl. `https://kolumbia17.hu/admin`). Belépéshez GitHub fiók szükséges, amelynek van írási jogosultsága a repóhoz.
 
 ### Tartalomtípusok (`public/admin/config.yml`)
 
@@ -144,7 +142,7 @@ A Markdown szövegszerkesztő (`body`) támogatja az irodai dokumentumok (Excel 
 A projekt Vercelen van hosztolva. Minden `develop` branchre érkező push automatikusan elindít egy deploy-t (amennyiben a Vercel GitHub integráció be van konfigurálva).
 
 **Konfiguráció:**
-- `astro.config.mjs` → `site: 'https://kolumbia17.vercel.app'`
+- `astro.config.mjs` → `site: 'https://kolumbia17.hu'`
 - `vercel.json` → `cleanUrls: true` (a `.html` kiterjesztések elhagyhatók az URL-ből)
 
 ### Dark Mode
