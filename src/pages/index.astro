@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero.astro';
+import HomeHero from '../components/HomeHero.astro';
 import { getEntry, getCollection, render } from 'astro:content';
 import { getUrl } from '../utils/url';
 import { Image } from 'astro:assets';
@@ -14,12 +14,7 @@ const latestNews = allNews
 ---
 
 <BaseLayout title={homeEntry?.data.title || "Főoldal"}>
-  <Hero 
-    title={homeEntry?.data.title || "Kolumbia Sport Klub"}
-    bgImage={homeEntry?.data.bgImage}
-    bgVideo={homeEntry?.data.bgVideo}
-    hideHeroTitle={homeEntry?.data.hideHeroTitle}
-  />
+  <HomeHero />
   
   <section class="intro-section container">
     <div class="intro-content prose">
