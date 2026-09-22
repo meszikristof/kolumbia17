@@ -5,7 +5,11 @@ import { getUrl } from '../utils/url';
 
 const allDocs = await getCollection('dokumentumok');
 const orderEntry = await getEntry('pages', 'document-order');
-const orderedIds: string[] = (orderEntry?.data.order ?? []).map((item: { id: string }) => item.id);
+const existingIds = new Set(allDocs.map((doc) => doc.id));
+
+// Deduplicate and filter out deleted documents
+const rawOrder = (orderEntry?.data.order ?? []).map((item: { id: string }) => item.id);
+const orderedIds: string[] = [...new Set(rawOrder)].filter((id) => existingIds.has(id));
 
 const sortedDocs = allDocs.sort((a, b) => {
   const idxA = orderedIds.indexOf(a.id);
