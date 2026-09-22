@@ -1,6 +1,6 @@
 ---
 title: Országos Sport és Versenyszabályzat
-date: 2026-09-22T10:37:00
+date: 2026-09-22T14:39:00
 pdf: ''
 ---
 
