@@ -42,7 +42,7 @@ function buildEmbedHtml(src, title, siteUrl) {
 
   let iframeSrc = '';
   if (docType === 'pdf') {
-    iframeSrc = absoluteSrc;
+    iframeSrc = `https://docs.google.com/viewer?url=${encodeURIComponent(absoluteSrc)}&embedded=true`;
   } else if (docType !== 'document') {
     iframeSrc = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(absoluteSrc)}`;
   }

@@ -130,17 +130,14 @@ const sortedDocs = allDocs.sort((a, b) => {
               {hasPdf && (
                 <div class="doc-preview-wrapper" hidden>
                   <div class="doc-preview-container">
-                    <object
+                    <iframe
                       class="doc-preview-iframe"
                       data-src={pdfUrl}
-                      type="application/pdf"
                       title={`${doc.data.title} előnézet`}
-                    >
-                      <div class="doc-preview-fallback">
-                        <p>A böngészője nem támogatja a beágyazott PDF-eket.</p>
-                        <a href={pdfUrl} target="_blank" rel="noopener noreferrer" class="download-btn">Megnyitás új lapon</a>
-                      </div>
-                    </object>
+                      loading="lazy"
+                      frameborder="0"
+                      allowfullscreen
+                    />
                   </div>
                 </div>
               )}
@@ -472,9 +469,10 @@ const sortedDocs = allDocs.sort((a, b) => {
           card.classList.add('is-preview-open');
           previewWrapper.hidden = false;
 
-          const targetSrc = iframe.dataset.src || pdfUrl;
-          if (iframe.getAttribute('data') !== targetSrc) {
-            iframe.setAttribute('data', targetSrc);
+          const rawSrc = iframe.dataset.src || pdfUrl;
+          const targetSrc = `https://docs.google.com/viewer?url=${encodeURIComponent(rawSrc)}&embedded=true`;
+          if (iframe.getAttribute('src') !== targetSrc) {
+            iframe.setAttribute('src', targetSrc);
           }
 
           allCardTriggers.forEach((t) => t.setAttribute('aria-expanded', 'true'));
