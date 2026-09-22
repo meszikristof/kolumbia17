@@ -8,7 +8,13 @@ const orderEntry = await getEntry('pages', 'document-order');
 const existingIds = new Set(allDocs.map((doc) => doc.id));
 
 // Deduplicate and filter out deleted documents
-const rawOrder = (orderEntry?.data.order ?? []).map((item: { id: string }) => item.id);
+// Sveltia CMS saves a list of relations either as string[] or object[]
+const rawList = Array.isArray(orderEntry?.data?.order) ? orderEntry.data.order : [];
+const rawOrder = rawList.map((item: any) => {
+  if (typeof item === 'string') return item;
+  if (item && typeof item === 'object') return item.id || item.slug || item.document || Object.values(item)[0] || '';
+  return '';
+}).filter(Boolean);
 const orderedIds: string[] = [...new Set(rawOrder)].filter((id) => existingIds.has(id));
 
 const sortedDocs = allDocs.sort((a, b) => {

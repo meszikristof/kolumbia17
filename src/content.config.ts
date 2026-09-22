@@ -55,8 +55,8 @@ const pagesCollection = defineCollection({
     address: z.string().optional(),
     orgName: z.string().optional(),
     taxNumber: z.string().optional(),
-    // document-order.md
-    order: z.array(z.object({ id: z.string() })).optional(),
+    // document-order.md (array of document slugs or objects)
+    order: z.array(z.any()).optional(),
     officials: z.array(
       z.object({
         groupName: z.string(),
