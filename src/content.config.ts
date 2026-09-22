@@ -38,7 +38,6 @@ const dokumentumokCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
-    order: z.number().optional(),
     pdf: z.string().optional(),
   }),
 });
@@ -46,7 +45,7 @@ const dokumentumokCollection = defineCollection({
 const pagesCollection = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/pages" }),
   schema: ({ image }) => z.object({
-    title: z.string(),
+    title: z.string().optional(),
     logo: image().optional(),
     bgImage: image().optional(),
     bgVideo: z.string().optional(),
@@ -56,6 +55,8 @@ const pagesCollection = defineCollection({
     address: z.string().optional(),
     orgName: z.string().optional(),
     taxNumber: z.string().optional(),
+    // document-order.md
+    order: z.array(z.object({ id: z.string() })).optional(),
     officials: z.array(
       z.object({
         groupName: z.string(),

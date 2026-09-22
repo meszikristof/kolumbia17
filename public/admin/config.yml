@@ -56,7 +56,6 @@ collections:
     fields:
       - { label: "Cím", name: "title", widget: "string" }
       - { label: "Dátum", name: "date", widget: "datetime" }
-      - { label: "Sorrend", name: "order", widget: "number", value_type: "int", required: false, hint: "A dokumentumok listázási sorrendje. A kisebb szám (pl. 1) jelenik meg legfelül." }
       - { label: "Dokumentum (PDF)", name: "pdf", widget: "file", required: false, media_folder: "/public/documents", public_folder: "/documents" }
       - { label: "Leírás", name: "body", widget: "markdown", required: false }
 
@@ -96,3 +95,20 @@ collections:
                   - { label: "Név", name: "name", widget: "string" }
                   - { label: "Telefonszám", name: "phone", widget: "string", required: false }
                   - { label: "Email cím", name: "email", widget: "string", required: false }
+      - label: "Dokumentumok sorrendje"
+        name: "document-order"
+        file: "src/content/pages/document-order.md"
+        fields:
+          - label: "Sorrend (húzd át a kívánt sorba)"
+            name: "order"
+            widget: "list"
+            required: false
+            hint: "Add hozzá az összes dokumentumot, majd húzd át őket a kívánt sorrendbe. Az itt nem szereplő dokumentumok a lista végére kerülnek, dátum szerint rendezve."
+            field:
+              label: "Dokumentum"
+              name: "id"
+              widget: "relation"
+              collection: "dokumentumok"
+              search_fields: ["title"]
+              value_field: "{{slug}}"
+              display_fields: ["title"]

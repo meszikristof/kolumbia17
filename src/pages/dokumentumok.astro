@@ -1,17 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection, render } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import { getUrl } from '../utils/url';
 
 const allDocs = await getCollection('dokumentumok');
+const orderEntry = await getEntry('pages', 'document-order');
+const orderedIds: string[] = (orderEntry?.data.order ?? []).map((item: { id: string }) => item.id);
+
 const sortedDocs = allDocs.sort((a, b) => {
-  const orderA = typeof a.data.order === 'number' ? a.data.order : 9999;
-  const orderB = typeof b.data.order === 'number' ? b.data.order : 9999;
-  
-  if (orderA !== orderB) {
-    return orderA - orderB;
+  const idxA = orderedIds.indexOf(a.id);
+  const idxB = orderedIds.indexOf(b.id);
+
+  const posA = idxA === -1 ? Infinity : idxA;
+  const posB = idxB === -1 ? Infinity : idxB;
+
+  if (posA !== posB) {
+    return posA - posB;
   }
-  
+
+  // Fallback: date descending for unlisted documents
   return b.data.date.valueOf() - a.data.date.valueOf();
 });
 ---
