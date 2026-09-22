@@ -56,6 +56,7 @@ collections:
     fields:
       - { label: "Cím", name: "title", widget: "string" }
       - { label: "Dátum", name: "date", widget: "datetime" }
+      - { label: "Sorrend", name: "order", widget: "number", value_type: "int", required: false, hint: "A dokumentumok listázási sorrendje. A kisebb szám (pl. 1) jelenik meg legfelül." }
       - { label: "Dokumentum (PDF)", name: "pdf", widget: "file", required: false, media_folder: "/public/documents", public_folder: "/documents" }
       - { label: "Leírás", name: "body", widget: "markdown", required: false }
 

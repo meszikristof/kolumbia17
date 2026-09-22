@@ -38,6 +38,7 @@ const dokumentumokCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
+    order: z.number().optional(),
     pdf: z.string().optional(),
   }),
 });

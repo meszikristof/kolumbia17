@@ -4,7 +4,16 @@ import { getCollection, render } from 'astro:content';
 import { getUrl } from '../utils/url';
 
 const allDocs = await getCollection('dokumentumok');
-const sortedDocs = allDocs.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const sortedDocs = allDocs.sort((a, b) => {
+  const orderA = typeof a.data.order === 'number' ? a.data.order : 9999;
+  const orderB = typeof b.data.order === 'number' ? b.data.order : 9999;
+  
+  if (orderA !== orderB) {
+    return orderA - orderB;
+  }
+  
+  return b.data.date.valueOf() - a.data.date.valueOf();
+});
 ---
 
 <BaseLayout title="Dokumentumok">
