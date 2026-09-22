@@ -1,5 +1,5 @@
 ---
-title: Szervezeti és Működési Szabályzat
+title: 002 Kolumbia Sport Klub Szervezeti és Működési Szabályzat
 date: 2026-08-24T14:43
 pdf: /documents/Működési szabályzat.pdf
 ---
