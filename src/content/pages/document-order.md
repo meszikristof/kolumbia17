@@ -1,0 +1,5 @@
+---
+order:
+  - alapszabaly
+  - alapszabaly
+---
