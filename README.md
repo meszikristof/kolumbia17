@@ -105,7 +105,7 @@ A weboldal a [Sveltia CMS](https://github.com/sveltia/sveltia-cms)-t használja 
 ### Hogyan működik?
 
 1. **A tartalom Git-ben tárolódik** — minden hír, eredmény, stb. egy `.md` (Markdown) fájl az `src/content/` mappában.
-2. **A CMS a GitHub API-n keresztül ír** — szerkesztéskor a Sveltia CMS közvetlenül commitot hoz létre a GitHub repoban a `develop` branchen.
+2. **A CMS a GitHub API-n keresztül ír** — szerkesztéskor a Sveltia CMS közvetlenül commitot hoz létre a GitHub repoban a `main` branchen.
 3. **A hitelesítés egy Cloudflare Workers proxyn fut** — a GitHub OAuth flow-t a `https://sveltia-cms-auth.meszikristof.workers.dev` végpont kezeli, így nincs szükség szerver oldali infrastruktúrára a hoston.
 
 ### Admin felület elérése

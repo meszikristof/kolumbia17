@@ -1,7 +1,7 @@
 backend:
   name: github
   repo: meszikristof/kolumbia17
-  branch: develop
+  branch: main
   base_url: "https://sveltia-cms-auth.meszikristof.workers.dev" 
 
 media_folder: "src/assets/images/uploads"
