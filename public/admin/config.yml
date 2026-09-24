@@ -116,3 +116,36 @@ collections:
                   - { label: "Név", name: "name", widget: "string" }
                   - { label: "Telefonszám", name: "phone", widget: "string", required: false }
                   - { label: "Email cím", name: "email", widget: "string", required: false }
+
+  - name: "galleria"
+    label: "Galéria"
+    folder: "src/content/galleria"
+    media_folder: "/src/assets/images/uploads/gallery"
+    public_folder: "/src/assets/images/uploads/gallery"
+    create: true
+    slug: "{{year}}-{{month}}-{{slug}}"
+    fields:
+      - { label: "Album neve", name: "title", widget: "string" }
+      - { label: "Dátum", name: "date", widget: "datetime" }
+      - label: "Címkék"
+        name: "tags"
+        widget: "list"
+        required: false
+        hint: "Szabadon megadható címkék (pl. Verseny, Edzőtábor, Közösségi)"
+      - label: "Borítókép"
+        name: "coverImage"
+        widget: "image"
+        media_folder: "/src/assets/images/uploads/gallery"
+        public_folder: "/src/assets/images/uploads/gallery"
+      - label: "Fényképek"
+        name: "images"
+        widget: "list"
+        fields:
+          - label: "Kép"
+            name: "image"
+            widget: "image"
+            media_folder: "/src/assets/images/uploads/gallery"
+            public_folder: "/src/assets/images/uploads/gallery"
+          - { label: "Felirat (opcionális)", name: "caption", widget: "string", required: false }
+      - { label: "Leírás", name: "body", widget: "markdown", required: false }
+

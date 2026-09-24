@@ -54,6 +54,7 @@ const faviconUrl = homeEntry?.data.logo?.src || "/favicon.svg";
         document.documentElement.classList.remove("dark");
       }
     </script>
+    <slot name="head" />
   </head>
   <body>
     <Header />

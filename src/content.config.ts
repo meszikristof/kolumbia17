@@ -73,10 +73,26 @@ const pagesCollection = defineCollection({
   }),
 });
 
+const galleriaCollection = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/galleria" }),
+  schema: ({ image }) => z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    tags: z.array(z.string()).optional(),
+    coverImage: image(),
+    images: z.array(z.object({
+      image: image(),
+      caption: z.string().optional(),
+    })),
+  }),
+});
+
 export const collections = {
   'hirek': hirekCollection,
   'eredmenyek': eredmenyekCollection,
   'versenykiiras': versenykiirasCollection,
   'dokumentumok': dokumentumokCollection,
   'pages': pagesCollection,
+  'galleria': galleriaCollection,
 };
+

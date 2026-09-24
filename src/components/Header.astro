@@ -13,13 +13,14 @@ const navItems = [
   { href: getUrl("/eredmenyek/"), text: "Eredmények" },
   { href: getUrl("/versenykiiras/"), text: "Versenykiírás" },
   { href: getUrl("/dokumentumok/"), text: "Dokumentumok" },
+  { href: getUrl("/galleria/"), text: "Galéria" },
   { href: getUrl("/rolunk/"), text: "Rólunk" },
 ];
 ---
 
-<header class="header">
-  <div class="container header-container">
-    <a href={getUrl("/")} class="logo">
+<header class="header" id="site-header">
+  <div class="container header-container" id="header-container">
+    <a href={getUrl("/")} class="logo" id="site-logo">
       {
         logo && (
           <Image
@@ -41,6 +42,8 @@ const navItems = [
     <button
       id="mobile-menu-btn"
       aria-label="Menü megnyitása"
+      aria-expanded="false"
+      aria-controls="main-nav"
       class="mobile-menu-btn"
     >
       <svg
@@ -244,14 +247,75 @@ const navItems = [
     color: var(--text-primary);
     cursor: pointer;
     padding: 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
   }
 
-  @media (max-width: 768px) {
-    .mobile-menu-btn {
+  .mobile-menu-btn:hover {
+    background-color: var(--bg-accent);
+  }
+
+  /* Grouped/mobile layout styles: applied dynamically via .is-mobile-view class */
+  .header.is-mobile-view .mobile-menu-btn {
+    display: block;
+  }
+
+  .header.is-mobile-view .nav {
+    display: none;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background-color: var(--bg-secondary);
+    flex-direction: column;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-light);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .header.is-mobile-view .nav.is-open {
+    display: flex;
+  }
+
+  .header.is-mobile-view .nav-list {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+
+  .header.is-mobile-view .nav-link {
+    display: block;
+    padding: 0.75rem;
+    border-radius: 8px;
+  }
+
+  .header.is-mobile-view .nav-link:hover {
+    background-color: var(--bg-accent);
+  }
+
+  .header.is-mobile-view .nav-actions {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid var(--border-light);
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Static fallback media query (max-width: 1080px):
+     Guarantees no flash of unstyled content or overflow on initial page render,
+     unless dynamic JS measurement explicitly verified desktop fits (.is-desktop-view). */
+  @media (max-width: 1080px) {
+    .header:not(.is-desktop-view) .mobile-menu-btn {
       display: block;
     }
 
-    .nav {
+    .header:not(.is-desktop-view) .nav {
       display: none;
       position: absolute;
       top: 70px;
@@ -264,28 +328,28 @@ const navItems = [
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    .nav.is-open {
+    .header:not(.is-desktop-view) .nav.is-open {
       display: flex;
     }
 
-    .nav-list {
+    .header:not(.is-desktop-view) .nav-list {
       flex-direction: column;
       width: 100%;
       gap: 0.5rem;
       align-items: stretch;
     }
 
-    .nav-link {
+    .header:not(.is-desktop-view) .nav-link {
       display: block;
       padding: 0.75rem;
       border-radius: 8px;
     }
 
-    .nav-link:hover {
+    .header:not(.is-desktop-view) .nav-link:hover {
       background-color: var(--bg-accent);
     }
 
-    .nav-actions {
+    .header:not(.is-desktop-view) .nav-actions {
       margin-top: 1rem;
       padding-top: 1rem;
       padding-left: 0;
@@ -301,13 +365,144 @@ const navItems = [
 </style>
 
 <script>
-  // Handle mobile menu toggle using event delegation (runs once on initial load)
+  let resizeRaf = 0;
+
+  function checkHeaderFit() {
+    const header = document.getElementById("site-header");
+    const container = document.getElementById("header-container");
+    const logo = document.getElementById("site-logo");
+    const nav = document.getElementById("main-nav");
+
+    if (!header || !container || !logo || !nav) return;
+
+    // Measure unconstrained navigation width using an offscreen element
+    // This accurately accounts for all nav links, actions, gaps, and font metrics
+    // regardless of whether the navigation is currently visible or collapsed.
+    const clone = nav.cloneNode(true);
+    clone.id = "";
+    clone.style.cssText =
+      "position:absolute!important;visibility:hidden!important;display:flex!important;flex-direction:row!important;width:max-content!important;max-width:none!important;left:-9999px!important;top:-9999px!important;pointer-events:none!important;";
+
+    const cloneList = clone.querySelector(".nav-list");
+    if (cloneList) {
+      cloneList.style.cssText =
+        "display:flex!important;flex-direction:row!important;width:max-content!important;gap:1.5rem!important;";
+    }
+
+    document.body.appendChild(clone);
+    const navWidth = clone.offsetWidth;
+    document.body.removeChild(clone);
+
+    const logoWidth = logo.offsetWidth;
+    const containerStyle = window.getComputedStyle(container);
+    const paddingLeft = parseFloat(containerStyle.paddingLeft) || 0;
+    const paddingRight = parseFloat(containerStyle.paddingRight) || 0;
+    const availableWidth = container.clientWidth - paddingLeft - paddingRight;
+
+    // Minimum comfortable gap between logo and navigation (24px)
+    const minGap = 24;
+    const totalRequiredWidth = logoWidth + navWidth + minGap;
+
+    if (availableWidth < totalRequiredWidth) {
+      header.classList.add("is-mobile-view");
+      header.classList.remove("is-desktop-view");
+    } else {
+      header.classList.remove("is-mobile-view");
+      header.classList.add("is-desktop-view");
+      // Close open mobile menu when returning to desktop mode
+      if (nav.classList.contains("is-open")) {
+        nav.classList.remove("is-open");
+        const btn = document.getElementById("mobile-menu-btn");
+        if (btn) {
+          btn.setAttribute("aria-expanded", "false");
+          btn.setAttribute("aria-label", "Menü megnyitása");
+        }
+      }
+    }
+  }
+
+  function handleResize() {
+    cancelAnimationFrame(resizeRaf);
+    resizeRaf = requestAnimationFrame(checkHeaderFit);
+  }
+
+  // Initial calculation and lifecycle hooks for View Transitions
+  document.addEventListener("astro:page-load", () => {
+    checkHeaderFit();
+
+    // Re-check once web fonts have fully loaded to ensure precise metrics
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(checkHeaderFit);
+    }
+
+    // Also re-check when the logo image finishes loading if not yet complete
+    const logoImg = document.querySelector("#site-logo .logo-img");
+    if (logoImg && !logoImg.complete) {
+      logoImg.addEventListener("load", checkHeaderFit, { once: true });
+    }
+  });
+
+  document.addEventListener("astro:after-swap", checkHeaderFit);
+
+  window.addEventListener("resize", handleResize, { passive: true });
+
+  // Handle menu toggle, link clicks, outside clicks, and Escape key
   document.addEventListener("click", (e) => {
-    const mobileMenuBtn = e.target.closest("#mobile-menu-btn");
+    const target = e.target;
+    const mobileMenuBtn = target.closest("#mobile-menu-btn");
+    const mainNav = document.getElementById("main-nav");
+    const header = document.getElementById("site-header");
+    const navLink = target.closest(".nav-link");
+
     if (mobileMenuBtn) {
-      const mainNav = document.getElementById("main-nav");
       if (mainNav) {
-        mainNav.classList.toggle("is-open");
+        const isOpen = mainNav.classList.toggle("is-open");
+        mobileMenuBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        mobileMenuBtn.setAttribute(
+          "aria-label",
+          isOpen ? "Menü bezárása" : "Menü megnyitása"
+        );
+      }
+      return;
+    }
+
+    // Close menu when clicking a navigation link
+    if (navLink && mainNav && mainNav.classList.contains("is-open")) {
+      mainNav.classList.remove("is-open");
+      const btn = document.getElementById("mobile-menu-btn");
+      if (btn) {
+        btn.setAttribute("aria-expanded", "false");
+        btn.setAttribute("aria-label", "Menü megnyitása");
+      }
+      return;
+    }
+
+    // Close menu when clicking outside the header
+    if (
+      header &&
+      !header.contains(target) &&
+      mainNav &&
+      mainNav.classList.contains("is-open")
+    ) {
+      mainNav.classList.remove("is-open");
+      const btn = document.getElementById("mobile-menu-btn");
+      if (btn) {
+        btn.setAttribute("aria-expanded", "false");
+        btn.setAttribute("aria-label", "Menü megnyitása");
+      }
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      const mainNav = document.getElementById("main-nav");
+      if (mainNav && mainNav.classList.contains("is-open")) {
+        mainNav.classList.remove("is-open");
+        const btn = document.getElementById("mobile-menu-btn");
+        if (btn) {
+          btn.setAttribute("aria-expanded", "false");
+          btn.setAttribute("aria-label", "Menü megnyitása");
+        }
       }
     }
   });
