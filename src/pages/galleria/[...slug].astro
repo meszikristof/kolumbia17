@@ -1,0 +1,232 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import { getUrl } from '../../utils/url';
+import { Image, getImage } from 'astro:assets';
+
+export async function getStaticPaths() {
+  const albums = await getCollection('galleria');
+  return albums.map(entry => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+// Pre-process full-size image URLs for lightbox
+const processedImages = await Promise.all(
+  entry.data.images.map(async (item) => {
+    const optimized = await getImage({ src: item.image, width: 1920, format: 'webp' });
+    return {
+      src: item.image,
+      fullSrc: optimized.src,
+      caption: item.caption,
+    };
+  })
+);
+---
+
+<BaseLayout title={entry.data.title}>
+  <link slot="head" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+
+  <div class="container page-content">
+    <div class="album-back">
+      <a href={getUrl('/galleria/')} class="back-link">&larr; Vissza a galériához</a>
+    </div>
+
+    <header class="album-header">
+      <time class="album-date">{entry.data.date.toLocaleDateString('hu-HU')}</time>
+      <h1 class="album-title">{entry.data.title}</h1>
+
+      {entry.data.tags && entry.data.tags.length > 0 && (
+        <div class="album-tags">
+          {entry.data.tags.map(tag => <span class="tag">{tag}</span>)}
+        </div>
+      )}
+
+      <div class="album-meta">
+        <span class="photo-count">{entry.data.images.length} fénykép</span>
+      </div>
+
+      {entry.body && (
+        <div class="album-description prose">
+          <Content />
+        </div>
+      )}
+    </header>
+
+    {processedImages.length > 0 ? (
+      <div class="masonry-grid">
+        {processedImages.map((item, i) => (
+          <div class="masonry-item">
+            <a
+              href={item.fullSrc}
+              class="glightbox"
+              data-gallery="album"
+              data-title={item.caption ?? ''}
+            >
+              <Image
+                src={item.src}
+                alt={item.caption ?? `${entry.data.title} – ${i + 1}. kép`}
+                class="masonry-img"
+                loading={i < 4 ? 'eager' : 'lazy'}
+                decoding="async"
+                width={800}
+              />
+              {item.caption && (
+                <p class="img-caption">{item.caption}</p>
+              )}
+            </a>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p class="no-content">Az album jelenleg üres.</p>
+    )}
+  </div>
+
+  <script is:inline src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <script is:inline>
+    function initGalleryLightbox() {
+      if (typeof GLightbox !== 'undefined') {
+        GLightbox({
+          selector: '.glightbox',
+          touchNavigation: true,
+          loop: true,
+          autoplayVideos: false,
+        });
+      }
+    }
+    document.addEventListener('DOMContentLoaded', initGalleryLightbox);
+    document.addEventListener('astro:page-load', initGalleryLightbox);
+  </script>
+</BaseLayout>
+
+<style>
+  .page-content {
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  .album-back {
+    margin-bottom: 2rem;
+  }
+
+  .back-link {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--accent-sky);
+  }
+
+  .album-header {
+    margin-bottom: 3rem;
+  }
+
+  .album-date {
+    display: block;
+    color: var(--accent-sky);
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .album-title {
+    font-size: 2.5rem;
+    margin: 0 0 1rem;
+  }
+
+  .album-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .tag {
+    background-color: var(--bg-accent);
+    color: var(--accent-sky);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+  }
+
+  .album-meta {
+    margin-bottom: 1.5rem;
+  }
+
+  .photo-count {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .album-description {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 700px;
+  }
+
+  /* CSS Masonry */
+  .masonry-grid {
+    columns: 4;
+    column-gap: 1rem;
+  }
+
+  @media (max-width: 1200px) {
+    .masonry-grid { columns: 3; }
+  }
+
+  @media (max-width: 768px) {
+    .masonry-grid { columns: 2; }
+  }
+
+  @media (max-width: 576px) {
+    .masonry-grid { columns: 1; }
+  }
+
+  .masonry-item {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+
+  .masonry-item a {
+    display: block;
+    text-decoration: none;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--bg-accent);
+  }
+
+  .masonry-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease, opacity 0.2s ease;
+  }
+
+  .masonry-item a:hover .masonry-img {
+    transform: scale(1.03);
+    opacity: 0.9;
+  }
+
+  .img-caption {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    padding: 0.4rem 0.6rem;
+    margin: 0;
+    background-color: var(--bg-secondary);
+  }
+
+  .no-content {
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 3rem 0;
+  }
+</style>
