@@ -1,7 +1,7 @@
 ---
 title: Jogerős VÉGZÉS
 date: 2026-10-13T12:50:00
-pdf: ''
+pdf: /documents/65293-1991-25.pdf
 ---
 
 
